@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("MilkCanvas Client")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Tristen Horton")]
 [assembly: AssemblyProduct("MilkCanvas Client")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCopyright("Copyright © Tristen Horton 2017.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

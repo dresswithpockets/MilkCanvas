@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{F9DE8AF5-9645-4532-85F0-1DB67B57A2C7}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>MilkCanvas_Client</RootNamespace>
+    <RootNamespace>MilkCanvas</RootNamespace>
     <AssemblyName>MilkCanvas Client</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -93,27 +93,34 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionBar.cs">
+    <Compile Include="Controls\ActionBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ActionBar.Designer.cs">
+    <Compile Include="Controls\ActionBar.Designer.cs">
       <DependentUpon>ActionBar.cs</DependentUpon>
     </Compile>
-    <Compile Include="BaseForm.cs">
+    <Compile Include="Enums\SocialPlatform.cs" />
+    <Compile Include="Forms\BaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BaseForm.Designer.cs">
+    <Compile Include="Forms\BaseForm.Designer.cs">
       <DependentUpon>BaseForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="LoginForm.cs">
+    <Compile Include="Forms\GettingStartedForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LoginForm.Designer.cs">
+    <Compile Include="Forms\GettingStartedForm.Designer.cs">
+      <DependentUpon>GettingStartedForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
     <Compile Include="NativeMethods.cs" />
-    <Compile Include="TwitchAuthenticatedEventArgs.cs" />
-    <Compile Include="TwitchHashFile.cs" />
+    <Compile Include="Events\TwitchAuthenticatedEventArgs.cs" />
+    <Compile Include="Models\TwitchHashFile.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -122,30 +129,33 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
-    <Compile Include="SocialButton.cs">
+    <Compile Include="Controls\SocialButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SocialButton.Designer.cs">
+    <Compile Include="Controls\SocialButton.Designer.cs">
       <DependentUpon>SocialButton.cs</DependentUpon>
     </Compile>
-    <Compile Include="TrayContext.cs">
+    <Compile Include="Forms\TrayContext.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TwitchFragment.cs" />
-    <EmbeddedResource Include="ActionBar.resx">
+    <Compile Include="Models\TwitchFragment.cs" />
+    <EmbeddedResource Include="Controls\ActionBar.resx">
       <DependentUpon>ActionBar.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BaseForm.resx">
+    <EmbeddedResource Include="Forms\BaseForm.resx">
       <DependentUpon>BaseForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LoginForm.resx">
+    <EmbeddedResource Include="Forms\GettingStartedForm.resx">
+      <DependentUpon>GettingStartedForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="SocialButton.resx">
+    <EmbeddedResource Include="Controls\SocialButton.resx">
       <DependentUpon>SocialButton.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.manifest" />
@@ -196,7 +206,10 @@
     </Content>
     <None Include="Assets\MilkIcon.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta004\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta004\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>

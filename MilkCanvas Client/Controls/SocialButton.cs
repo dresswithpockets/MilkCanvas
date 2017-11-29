@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace MilkCanvas_Client
+﻿namespace MilkCanvas.Controls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Data;
+    using System.Drawing;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows.Forms;
+
+    using MilkCanvas.Enums;
+
     public partial class SocialButton : UserControl
     {
         private Color twitchPurple = Color.FromArgb(255, 100, 64, 164);
@@ -28,20 +30,29 @@ namespace MilkCanvas_Client
         private bool disabled;
         private SocialPlatform platform;
 
+        public SocialButton()
+        {
+            this.InitializeComponent();
+
+            this.UpdatePlatform();
+            this.UpdateDisabled();
+        }
+
         public new event EventHandler Click
         {
             add
             {
                 base.Click += value;
-                foreach (Control control in Controls)
+                foreach (Control control in this.Controls)
                 {
                     control.Click += value;
                 }
             }
+
             remove
             {
                 base.Click -= value;
-                foreach (Control control in Controls)
+                foreach (Control control in this.Controls)
                 {
                     control.Click -= value;
                 }
@@ -50,74 +61,59 @@ namespace MilkCanvas_Client
 
         public SocialPlatform Platform
         {
-            get => platform;
+            get => this.platform;
             set
             {
-                platform = value;
-                UpdatePlatform();
-                UpdateDisabled();
+                this.platform = value;
+                this.UpdatePlatform();
+                this.UpdateDisabled();
             }
         }
 
         public bool Disabled
         {
-            get => disabled;
+            get => this.disabled;
             set
             {
-                disabled = value;
-                UpdateDisabled();
+                this.disabled = value;
+                this.UpdateDisabled();
             }
-        }
-
-        public SocialButton()
-        {
-            InitializeComponent();
-
-            UpdatePlatform();
-            UpdateDisabled();
         }
 
         private void UpdatePlatform()
         {
-            switch (Platform)
+            switch (this.Platform)
             {
                 case SocialPlatform.Twitch:
-                    connectText.Text = twitchText;
-                    logoBox.BackgroundImage = twitchLogo;
-                    BackColor = twitchPurple;
+                    this.connectText.Text = this.twitchText;
+                    this.logoBox.BackgroundImage = this.twitchLogo;
+                    this.BackColor = this.twitchPurple;
                     break;
                 case SocialPlatform.Mixer:
-                    connectText.Text = mixerText;
-                    logoBox.BackgroundImage = mixerLogo;
-                    BackColor = mixerBlue;
+                    this.connectText.Text = this.mixerText;
+                    this.logoBox.BackgroundImage = this.mixerLogo;
+                    this.BackColor = this.mixerBlue;
                     break;
                 case SocialPlatform.YouTube:
-                    connectText.Text = youtubeText;
-                    logoBox.BackgroundImage = youtubeLogo;
-                    BackColor = youtubeRed;
+                    this.connectText.Text = this.youtubeText;
+                    this.logoBox.BackgroundImage = this.youtubeLogo;
+                    this.BackColor = this.youtubeRed;
                     break;
             }
         }
 
         private void UpdateDisabled()
         {
-            if (Disabled)
+            if (this.Disabled)
             {
-                BackColor = disabledGray;
-                Cursor = Cursors.Arrow;
+                this.BackColor = this.disabledGray;
+                this.Cursor = Cursors.Arrow;
             }
             else
             {
-                Cursor = Cursors.Hand;
-                UpdatePlatform();
+                this.Cursor = Cursors.Hand;
+                this.UpdatePlatform();
             }
         }
-    }
-
-    public enum SocialPlatform
-    {
-        Twitch,
-        Mixer,
-        YouTube
     }
 }

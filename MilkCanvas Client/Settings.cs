@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Configuration;
-
-namespace MilkCanvas_Client
+﻿namespace MilkCanvas
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows.Forms;
+
     public static class Settings
     {
         private const string launchedKey = "Launched";
@@ -16,20 +16,14 @@ namespace MilkCanvas_Client
         private const string twitchSubjectKey = "TwitchSubject";
         private const string twitchAccessTokenKey = "TwitchAccessToken";
 
-        public static class Scripts
-        {
-            private const string selfhostPath = "Scripts/selfhost.js";
-
-            private static Lazy<string> selfhost = new Lazy<string>(() => ReadFileText(selfhostPath));
-
-            public static string Selfhost => selfhost.Value;
-        }
-
-        private readonly static Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+        private static readonly Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
 
         public static bool FirstLaunch => GetSetting(launchedKey) == null;
+
         public static string State => GetSetting(stateKey)?.Value ?? null;
-        public static string TwitchSubject  => GetSetting(twitchSubjectKey)?.Value ?? null;
+
+        public static string TwitchSubject => GetSetting(twitchSubjectKey)?.Value ?? null;
+
         public static string TwitchAccessToken => GetSetting(twitchAccessTokenKey)?.Value ?? null;
 
         public static KeyValueConfigurationElement GetSetting(string key) => config.AppSettings.Settings[key];
@@ -99,6 +93,15 @@ namespace MilkCanvas_Client
             {
                 return false;
             }
+        }
+
+        public static class Scripts
+        {
+            private const string selfhostPath = "Scripts/selfhost.js";
+
+            private static Lazy<string> selfhost = new Lazy<string>(() => ReadFileText(selfhostPath));
+
+            public static string Selfhost => selfhost.Value;
         }
     }
 }

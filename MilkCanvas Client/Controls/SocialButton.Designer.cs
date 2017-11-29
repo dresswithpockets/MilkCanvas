@@ -1,4 +1,4 @@
-﻿namespace MilkCanvas_Client
+﻿namespace MilkCanvas.Controls
 {
     partial class SocialButton
     {

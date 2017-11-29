@@ -1,4 +1,4 @@
-﻿namespace MilkCanvas_Client
+﻿namespace MilkCanvas.Forms
 {
     partial class BaseForm
     {
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BaseForm));
-            this.actionBar = new MilkCanvas_Client.ActionBar();
+            this.actionBar = new MilkCanvas.Controls.ActionBar();
             this.SuspendLayout();
             // 
             // actionBar
@@ -44,9 +44,9 @@
             this.actionBar.Name = "actionBar";
             this.actionBar.Size = new System.Drawing.Size(300, 20);
             this.actionBar.TabIndex = 0;
-            this.actionBar.OnCloseRequested += new System.EventHandler(this.actionBar_OnCloseRequested);
-            this.actionBar.OnSizeSwapRequested += new System.EventHandler(this.actionBar_OnSizeSwapRequested);
-            this.actionBar.OnMinimizeRequested += new System.EventHandler(this.actionBar_OnMinimizeRequested);
+            this.actionBar.OnCloseRequested += new System.EventHandler(this.ActionBar_OnCloseRequested);
+            this.actionBar.OnSizeSwapRequested += new System.EventHandler(this.ActionBar_OnSizeSwapRequested);
+            this.actionBar.OnMinimizeRequested += new System.EventHandler(this.ActionBar_OnMinimizeRequested);
             // 
             // BaseForm
             // 
@@ -66,7 +66,7 @@
 
         #endregion
 
-        private ActionBar actionBar;
+        private MilkCanvas.Controls.ActionBar actionBar;
     }
 }
 

@@ -1,4 +1,4 @@
-﻿namespace MilkCanvas_Client
+﻿namespace MilkCanvas.Forms
 {
     partial class LoginForm
     {
@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.twitchConnectButton = new MilkCanvas_Client.SocialButton();
-            this.mixerConnectButton = new MilkCanvas_Client.SocialButton();
-            this.youtubeConnectButton = new MilkCanvas_Client.SocialButton();
+            this.twitchConnectButton = new MilkCanvas.Controls.SocialButton();
+            this.mixerConnectButton = new MilkCanvas.Controls.SocialButton();
+            this.youtubeConnectButton = new MilkCanvas.Controls.SocialButton();
             this.SuspendLayout();
             // 
             // twitchConnectButton
@@ -40,10 +40,10 @@
             this.twitchConnectButton.Disabled = false;
             this.twitchConnectButton.Location = new System.Drawing.Point(22, 46);
             this.twitchConnectButton.Name = "twitchConnectButton";
-            this.twitchConnectButton.Platform = MilkCanvas_Client.SocialPlatform.Twitch;
+            this.twitchConnectButton.Platform = MilkCanvas.Enums.SocialPlatform.Twitch;
             this.twitchConnectButton.Size = new System.Drawing.Size(256, 36);
             this.twitchConnectButton.TabIndex = 1;
-            this.twitchConnectButton.Click += new System.EventHandler(this.twitchConnectButton_Click);
+            this.twitchConnectButton.Click += new System.EventHandler(this.TwitchConnectButton_Click);
             // 
             // mixerConnectButton
             // 
@@ -52,7 +52,7 @@
             this.mixerConnectButton.Disabled = true;
             this.mixerConnectButton.Location = new System.Drawing.Point(22, 88);
             this.mixerConnectButton.Name = "mixerConnectButton";
-            this.mixerConnectButton.Platform = MilkCanvas_Client.SocialPlatform.Mixer;
+            this.mixerConnectButton.Platform = MilkCanvas.Enums.SocialPlatform.Mixer;
             this.mixerConnectButton.Size = new System.Drawing.Size(256, 36);
             this.mixerConnectButton.TabIndex = 2;
             // 
@@ -63,7 +63,7 @@
             this.youtubeConnectButton.Disabled = true;
             this.youtubeConnectButton.Location = new System.Drawing.Point(22, 130);
             this.youtubeConnectButton.Name = "youtubeConnectButton";
-            this.youtubeConnectButton.Platform = MilkCanvas_Client.SocialPlatform.YouTube;
+            this.youtubeConnectButton.Platform = MilkCanvas.Enums.SocialPlatform.YouTube;
             this.youtubeConnectButton.Size = new System.Drawing.Size(256, 36);
             this.youtubeConnectButton.TabIndex = 3;
             // 
@@ -87,8 +87,8 @@
 
         #endregion
 
-        private SocialButton twitchConnectButton;
-        private SocialButton mixerConnectButton;
-        private SocialButton youtubeConnectButton;
+        private Controls.SocialButton twitchConnectButton;
+        private Controls.SocialButton mixerConnectButton;
+        private Controls.SocialButton youtubeConnectButton;
     }
 }

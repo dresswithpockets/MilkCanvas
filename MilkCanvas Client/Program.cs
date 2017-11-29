@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace MilkCanvas_Client
+﻿namespace MilkCanvas
 {
-    static class Program
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using System.Windows.Forms;
+
+    using MilkCanvas.Forms;
+
+    internal static class Program
     {
         private static Mutex mutex = new Mutex(true, "{f9de8af5-9645-4532-85f0-1db67b57a2c7}");
 
@@ -15,7 +17,7 @@ namespace MilkCanvas_Client
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        private static void Main()
         {
             if (mutex.WaitOne(TimeSpan.Zero, true))
             {

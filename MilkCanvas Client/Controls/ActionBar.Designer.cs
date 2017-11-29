@@ -1,4 +1,4 @@
-﻿namespace MilkCanvas_Client
+﻿namespace MilkCanvas.Controls
 {
     partial class ActionBar
     {
@@ -51,7 +51,7 @@
             this.closeButton.TabIndex = 0;
             this.closeButton.Text = "✕ ";
             this.closeButton.UseVisualStyleBackColor = true;
-            this.closeButton.Click += new System.EventHandler(this.closeButton_Click);
+            this.closeButton.Click += new System.EventHandler(this.CloseButton_Click);
             // 
             // maximizeButton
             // 
@@ -69,7 +69,7 @@
             this.maximizeButton.TabIndex = 1;
             this.maximizeButton.Text = "☐ ";
             this.maximizeButton.UseVisualStyleBackColor = true;
-            this.maximizeButton.Click += new System.EventHandler(this.maximizeButton_Click);
+            this.maximizeButton.Click += new System.EventHandler(this.MaximizeButton_Click);
             // 
             // minimizeButton
             // 
@@ -87,7 +87,7 @@
             this.minimizeButton.TabIndex = 2;
             this.minimizeButton.Text = "🗕";
             this.minimizeButton.UseVisualStyleBackColor = true;
-            this.minimizeButton.Click += new System.EventHandler(this.minimizeButton_Click);
+            this.minimizeButton.Click += new System.EventHandler(this.MinimizeButton_Click);
             // 
             // canvasLabel
             // 
