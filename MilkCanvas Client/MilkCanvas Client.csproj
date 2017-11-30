@@ -99,6 +99,9 @@
     <Compile Include="Controls\ActionBar.Designer.cs">
       <DependentUpon>ActionBar.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TablessTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Enums\SocialPlatform.cs" />
     <Compile Include="Forms\BaseForm.cs">
       <SubType>Form</SubType>
@@ -118,6 +121,7 @@
     <Compile Include="Forms\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Command.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="Events\TwitchAuthenticatedEventArgs.cs" />
     <Compile Include="Models\TwitchHashFile.cs" />
@@ -182,6 +186,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\GettingStarted1.png" />
+    <Content Include="Assets\GettingStarted2.png" />
+    <Content Include="Assets\GettingStarted3.png" />
     <Content Include="Assets\Glitch_White_RGB.png" />
     <Content Include="Assets\Glitch_White_RGB_padded.png" />
     <Content Include="Assets\MixerMerge_White.png" />
