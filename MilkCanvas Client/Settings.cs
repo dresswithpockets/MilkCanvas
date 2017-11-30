@@ -9,14 +9,25 @@
     using System.Threading.Tasks;
     using System.Windows.Forms;
 
+    using MilkCanvas.Models;
+
+    using Newtonsoft.Json;
+
     public static class Settings
     {
+        private const string commandsPath = "commands.json";
         private const string launchedKey = "Launched";
         private const string stateKey = "State";
         private const string twitchSubjectKey = "TwitchSubject";
         private const string twitchAccessTokenKey = "TwitchAccessToken";
 
         private static readonly Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+
+        private static readonly Lazy<Command[]> commands = new Lazy<Command[]>(() => JsonConvert.DeserializeObject<Command[]>(ReadFileText(commandsPath)));
+
+        public static Command[] Commands => commands.Value;
+
+        public static bool CommandsExist => File.Exists(commandsPath);
 
         public static bool FirstLaunch => GetSetting(launchedKey) == null;
 
@@ -53,6 +64,11 @@
             config.Save();
         }
 
+        public static void SaveCommands(Command[] cmds)
+        {
+            SaveFileText(commandsPath, JsonConvert.SerializeObject(cmds));
+        }
+
         public static void UpdateSetting(string key, string value)
         {
             var setting = GetSetting(key);
@@ -72,6 +88,15 @@
             using (var reader = new StreamReader(file))
             {
                 return reader.ReadToEnd();
+            }
+        }
+
+        public static void SaveFileText(string path, string text)
+        {
+            using (var file = File.Open(path, FileMode.Open, FileAccess.Write, FileShare.None))
+            using (var writer = new StreamWriter(file))
+            {
+                writer.WriteAsync(text);
             }
         }
 
