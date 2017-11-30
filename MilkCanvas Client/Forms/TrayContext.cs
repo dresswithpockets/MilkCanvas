@@ -10,8 +10,8 @@
     using System.Windows.Forms;
 
     using MilkCanvas;
-    using MilkCanvas.Controls;
     using MilkCanvas.Events;
+    using MilkCanvas.Models;
 
     using TwitchLib;
     using TwitchLib.Events.Client;
@@ -23,6 +23,7 @@
     public class TrayContext : Form
     {
         private bool disposed;
+        private List<Command> commands;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TrayContext"/> class.
@@ -33,6 +34,8 @@
         }
 
         private LoginForm Login { get; set; }
+
+        private GettingStartedForm GettingStarted { get; set; }
 
         private TwitchClient Client { get; set; }
 
@@ -116,6 +119,9 @@
                 this.IconMenu?.Dispose();
 
                 this.Client?.Disconnect();
+
+                this.Login?.Dispose();
+                this.GettingStarted?.Dispose();
             }
 
             // dispose unmanaged state
@@ -123,6 +129,8 @@
             // unreference values by setting them to null, ensuring that the GC knows we no longer need them.
             this.TrayIcon = null;
             this.IconMenu = null;
+            this.Login = null;
+            this.GettingStarted = null;
 
             this.Client = null;
             this.API = null;
@@ -135,11 +143,23 @@
 
         private void Initialize()
         {
+            if (Settings.CommandsExist)
+            {
+                this.commands = new List<Command>(Settings.Commands);
+            }
+            else
+            {
+                this.commands = new List<Command>();
+                this.SetupCommands();
+            }
+
             this.Config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
 
             this.Login = new LoginForm();
             this.Login.FormClosed += this.Login_FormClosed;
             this.Login.TwitchAuthenticated += this.Login_TwitchAuthenticated;
+
+            this.GettingStarted = new GettingStartedForm();
 
             this.IconMenu = new ContextMenu();
             this.TrayIcon = new NotifyIcon
@@ -150,13 +170,14 @@
                 Visible = true,
             };
 
-            this.IconMenu.MenuItems.Add("Settings", this.TrayIcon_Settings);
+            this.IconMenu.MenuItems.Add("Canvas", this.TrayIcon_Canvas);
+            this.IconMenu.MenuItems.Add("-");
             this.IconMenu.MenuItems.Add("Check For Updates", this.TrayIcon_CheckForUpdates);
             this.IconMenu.MenuItems.Add("About", this.TrayIcon_About);
             this.IconMenu.MenuItems.Add("-");
             this.IconMenu.MenuItems.Add("Exit", this.TrayIcon_Exit);
 
-            // FirstLaunch is a special property that handles getting and setting the launch state of the app
+            // FirstLaunch is a special property that handles getting the launch state of the app
             // from the app config. If there is a launch value already saved then this app has been launched before
             // and we need to follow up with a first time setup.
             if (Settings.FirstLaunch)
@@ -164,8 +185,6 @@
                 // the login form will handle the actual authentication of the user.
                 // All we're waiting for is LoginForm to close with a token response.
                 this.Login.Show();
-
-                this.FirstTimeSetup();
             }
             else
             {
@@ -178,8 +197,41 @@
             }
         }
 
+        private void SetupCommands()
+        {
+            this.commands.Add(new Command("uptime", "Prints the current uptime of the stream, if its live.", this.Uptime_ChatCommand));
+            this.commands.Add(new Command("commands", "Prints a list of all of the available commands.", this.Commands_ChatCommand));
+            this.commands.Add(new Command("command", "Handles the creation, deleting and update of chat commands.", this.Command_ChatCommand));
+            this.commands.Add(new Command("alias", "Creates or removes aliases for existing commands", this.Alias_ChatCommand));
+        }
+
+        private void Uptime_ChatCommand(object sender, OnChatCommandReceivedArgs e)
+        {
+            // TODO: Relay uptime
+        }
+
+        private void Commands_ChatCommand(object sender, OnChatCommandReceivedArgs e)
+        {
+            // TODO: Relay a list of commands
+        }
+
+        private void Command_ChatCommand(object sender, OnChatCommandReceivedArgs e)
+        {
+            // TODO: Implement adding, updating, and removing commands.
+        }
+
+        private void Alias_ChatCommand(object sender, OnChatCommandReceivedArgs e)
+        {
+            // TODO: Implement command aliasing.
+        }
+
         private void Login_TwitchAuthenticated(object sender, TwitchAuthenticatedEventArgs e)
         {
+            if (Settings.FirstLaunch)
+            {
+                this.GettingStarted.Show();
+            }
+
             this.TwitchSetup(Properties.Resources.TwitchClient, e.Hash.AccessToken, e.Hash.Fragment.Subject, e.Hash.State, true);
         }
 
@@ -206,23 +258,44 @@
             // if the user wants to use another account, have them sign in with the other account.
         }
 
-        private void Client_OnReSubscriber(object sender, OnReSubscriberArgs e) => throw new NotImplementedException();
+        private void Client_OnReSubscriber(object sender, OnReSubscriberArgs e)
+        {
+            // TODO: Implement resub message
+        }
 
-        private void Client_OnNewSubscriber(object sender, OnNewSubscriberArgs e) => throw new NotImplementedException();
+        private void Client_OnNewSubscriber(object sender, OnNewSubscriberArgs e)
+        {
+            // TODO: Implement sub message
+        }
 
-        private void Client_OnWhisperCommandReceived(object sender, OnWhisperCommandReceivedArgs e) => throw new NotImplementedException();
+        private void Client_OnWhisperCommandReceived(object sender, OnWhisperCommandReceivedArgs e)
+        {
+            // TODO: Implement command system
+        }
 
-        private void Client_OnChatCommandReceived(object sender, OnChatCommandReceivedArgs e) => throw new NotImplementedException();
+        private void Client_OnChatCommandReceived(object sender, OnChatCommandReceivedArgs e)
+        {
+            // TODO: Implement command system
+        }
 
         private void TrayIcon_Exit(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void TrayIcon_About(object sender, EventArgs e) => throw new NotImplementedException();
+        private void TrayIcon_About(object sender, EventArgs e)
+        {
+            // TODO: Show About window
+        }
 
-        private void TrayIcon_CheckForUpdates(object sender, EventArgs e) => throw new NotImplementedException();
+        private void TrayIcon_CheckForUpdates(object sender, EventArgs e)
+        {
+            // TODO: Implement update system
+        }
 
-        private void TrayIcon_Settings(object sender, EventArgs e) => throw new NotImplementedException();
+        private void TrayIcon_Canvas(object sender, EventArgs e)
+        {
+            // TODO: Implement Canvas menu
+        }
     }
 }
