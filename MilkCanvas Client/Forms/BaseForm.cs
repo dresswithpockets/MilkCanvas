@@ -11,8 +11,14 @@
     using System.Threading.Tasks;
     using System.Windows.Forms;
 
+    /// <summary>
+    /// A base form with an Action bar and some useful events.
+    /// </summary>
     public partial class BaseForm : Form, IMessageFilter
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseForm"/> class.
+        /// </summary>
         public BaseForm()
         {
             this.InitializeComponent();
