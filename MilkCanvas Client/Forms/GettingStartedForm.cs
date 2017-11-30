@@ -14,8 +14,19 @@
     {
         public GettingStartedForm()
         {
-            // TODO: implement swiping/nextpage Getting Started form for new users.
             this.InitializeComponent();
+        }
+
+        private void NextPageButton_Click(object sender, EventArgs e)
+        {
+            if (this.gettingStartedTabs.TabIndex < this.gettingStartedTabs.TabCount)
+            {
+                this.gettingStartedTabs.TabIndex++;
+            }
+            else
+            {
+                this.Close();
+            }
         }
     }
 }
