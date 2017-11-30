@@ -63,6 +63,36 @@ namespace MilkCanvas.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap GettingStarted1 {
+            get {
+                object obj = ResourceManager.GetObject("GettingStarted1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap GettingStarted2 {
+            get {
+                object obj = ResourceManager.GetObject("GettingStarted2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap GettingStarted3 {
+            get {
+                object obj = ResourceManager.GetObject("GettingStarted3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Glitch_White_RGB {
             get {
                 object obj = ResourceManager.GetObject("Glitch_White_RGB", resourceCulture);
