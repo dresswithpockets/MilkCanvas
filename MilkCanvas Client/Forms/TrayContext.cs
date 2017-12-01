@@ -10,12 +10,17 @@
     using System.Windows.Forms;
 
     using MilkCanvas;
+    using MilkCanvas.Enums;
     using MilkCanvas.Events;
     using MilkCanvas.Models;
 
     using TwitchLib;
+    using TwitchLib.Enums;
     using TwitchLib.Events.Client;
     using TwitchLib.Models.Client;
+
+    using MChatCommand = Models.ChatCommand;
+    using STimer = System.Timers.Timer;
 
     /// <summary>
     /// A context which instantiates a notification icon in the notification tray and initializes contexts with streaming services.
@@ -23,7 +28,11 @@
     public class TrayContext : Form
     {
         private bool disposed;
-        private List<Command> commands;
+        private List<Models.ChatCommand> chatCommands;
+        private List<Command> builtinCommands;
+        private List<Alias> aliases;
+        private List<Permission> permissions;
+        private List<CommandTimeout> timeouts;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TrayContext"/> class.
@@ -39,6 +48,8 @@
 
         private TwitchClient Client { get; set; }
 
+        private TwitchClient ChatClient { get; set; }
+
         private TwitchAPI API { get; set; }
 
         private ConnectionCredentials Credentials { get; set; }
@@ -48,6 +59,8 @@
         private NotifyIcon TrayIcon { get; set; }
 
         private ContextMenu IconMenu { get; set; }
+
+        private About About { get; set; }
 
         private string IconText => "MilkCanvas Client";
 
@@ -71,13 +84,102 @@
             this.Client.OnNewSubscriber += this.Client_OnNewSubscriber;
             this.Client.OnReSubscriber += this.Client_OnReSubscriber;
             this.Client.OnChatCommandReceived += this.Client_OnChatCommandReceived;
-            this.Client.OnWhisperCommandReceived += this.Client_OnWhisperCommandReceived;
+            this.Client.OnGiftedSubscription += this.Client_OnGiftedSubscription;
 
             this.Client.Connect();
 
+            // TODO: Update ChatClient if the user wants to have a secondary bot account used for chat.
+            this.ChatClient = this.Client;
+
             if (save)
             {
-                Settings.Save(true, state, subject, access);
+                Settings.Save(
+                    firstLaunch: true,
+                    state: state,
+                    twitchSubject: subject,
+                    twitchAccessToken: access);
+            }
+        }
+
+        public MChatCommand FindChatCommand(string identifier)
+        {
+            return this.chatCommands.FirstOrDefault(c => c.Identifier.Equals(identifier));
+        }
+
+        public Command FindBuiltinCommand(string identifier)
+        {
+            return this.builtinCommands.FirstOrDefault(c => c.Identifier.Equals(identifier));
+        }
+
+        public Alias FindAlias(string alias)
+        {
+            return this.aliases.FirstOrDefault(a => a.Alternate.Equals(alias));
+        }
+
+        public bool TryChatCommandFromAlias(Alias alias, out MChatCommand chatCommand)
+        {
+            chatCommand = this.FindChatCommand(alias?.Command);
+            return chatCommand != null;
+        }
+
+        public bool TryBuiltinCommandFromAlias(Alias alias, out Command command)
+        {
+            command = this.FindBuiltinCommand(alias?.Command);
+            return command != null;
+        }
+
+        public Permission FindPermissionFromCommand(string command)
+        {
+            return this.permissions.FirstOrDefault(p => p.Command.Equals(command));
+        }
+
+        public Permission FindPermissionFromAlias(string aliasIdentifier)
+        {
+            var alias = this.FindAlias(aliasIdentifier);
+            if (this.TryChatCommandFromAlias(alias, out var chatCommand))
+            {
+                return this.FindPermissionFromCommand(chatCommand.Identifier);
+            }
+
+            if (this.TryBuiltinCommandFromAlias(alias, out var command))
+            {
+                return this.FindPermissionFromCommand(command.Identifier);
+            }
+
+            return null;
+        }
+
+        public void TimeoutCommand(string command)
+        {
+            var timer = new STimer(Settings.CommandDelay);
+            timer.Elapsed += (sender, e) =>
+            {
+                this.RemoveCommandTimeout(command);
+                timer.Stop();
+            };
+            this.timeouts.Add(new CommandTimeout(command, timer));
+            timer.Start();
+        }
+
+        public bool CommandTimedout(string command)
+        {
+            return this.timeouts.FirstOrDefault(t => t.Command.Equals(command)) != null;
+        }
+
+        public void RemoveCommandTimeout(string command)
+        {
+            this.timeouts.Remove(this.timeouts.FirstOrDefault(t => t.Command.Equals(command)));
+        }
+
+        public bool ValidPermissions(ChatMessage chat, Permission permission)
+        {
+            switch (permission?.Group)
+            {
+                case Group.Broadcaster: return chat.IsBroadcaster;
+                case Group.Moderator: return chat.IsBroadcaster || chat.IsModerator;
+                case Group.Subscriber: return chat.IsBroadcaster || chat.IsModerator || chat.IsSubscriber;
+                case Group.Viewer: return true;
+                default: return true;
             }
         }
 
@@ -119,6 +221,10 @@
                 this.IconMenu?.Dispose();
 
                 this.Client?.Disconnect();
+                if (this.Client != this.ChatClient)
+                {
+                    this.ChatClient?.Disconnect();
+                }
 
                 this.Login?.Dispose();
                 this.GettingStarted?.Dispose();
@@ -133,6 +239,7 @@
             this.GettingStarted = null;
 
             this.Client = null;
+            this.ChatClient = null;
             this.API = null;
             this.Credentials = null;
 
@@ -143,21 +250,42 @@
 
         private void Initialize()
         {
-            if (Settings.CommandsExist)
+            if (Settings.ChatCommandsExist)
             {
-                this.commands = new List<Command>(Settings.Commands);
+                this.chatCommands = new List<MChatCommand>(Settings.ChatCommands);
             }
             else
             {
-                this.commands = new List<Command>();
-                this.SetupCommands();
+                this.chatCommands = new List<MChatCommand>();
             }
+
+            if (Settings.PermissionsExist)
+            {
+                this.permissions = new List<Permission>(Settings.Permissions);
+            }
+            else
+            {
+                this.permissions = new List<Permission>();
+            }
+
+            if (Settings.AliasesExists)
+            {
+                this.aliases = new List<Alias>(Settings.Aliases);
+            }
+            else
+            {
+                this.aliases = new List<Alias>();
+            }
+
+            this.SetupBuiltinCommands();
 
             this.Config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
 
             this.Login = new LoginForm();
             this.Login.FormClosed += this.Login_FormClosed;
             this.Login.TwitchAuthenticated += this.Login_TwitchAuthenticated;
+
+            this.About = new About();
 
             this.GettingStarted = new GettingStartedForm();
 
@@ -197,32 +325,195 @@
             }
         }
 
-        private void SetupCommands()
+        private void SetupBuiltinCommands()
         {
-            this.commands.Add(new Command("uptime", "Prints the current uptime of the stream, if its live.", this.Uptime_ChatCommand));
-            this.commands.Add(new Command("commands", "Prints a list of all of the available commands.", this.Commands_ChatCommand));
-            this.commands.Add(new Command("command", "Handles the creation, deleting and update of chat commands.", this.Command_ChatCommand));
-            this.commands.Add(new Command("alias", "Creates or removes aliases for existing commands", this.Alias_ChatCommand));
+            this.builtinCommands = new List<Command>();
+            this.builtinCommands.Add(new Command("uptime", "Prints the current uptime of the stream, if its live.", this.Uptime_ChatCommand));
+            this.builtinCommands.Add(new Command("commands", "Prints a list of all of the available commands.", this.Commands_ChatCommand));
+            this.builtinCommands.Add(new Command("command", "Handles the creation, deleting and update of chat commands.", this.Command_ChatCommand));
+            this.builtinCommands.Add(new Command("alias", "Creates or removes aliases for existing commands.", this.Alias_ChatCommand));
+            this.builtinCommands.Add(new Command("permission", "Changes the permissions required to run a command.", this.Permission_ChatCommand));
         }
 
-        private void Uptime_ChatCommand(object sender, OnChatCommandReceivedArgs e)
+        private async void Uptime_ChatCommand(object sender, OnChatCommandReceivedArgs e)
         {
-            // TODO: Relay uptime
+            var response = string.Empty;
+            var user = await this.API.Users.v5.GetUserByNameAsync(e.Command.ChatMessage.Channel);
+            var id = user.Matches[0].Id;
+            if (await this.API.Streams.v5.BroadcasterOnlineAsync(id))
+            {
+                var time = await this.API.Streams.v5.GetUptimeAsync(id);
+                response = $"Uptime: {time?.ToString().Split('.')[0]}";
+            }
+            else
+            {
+                response = "Stream is offline!";
+            }
+
+            this.Client.SendMessage($"@{e.Command.ChatMessage.DisplayName} {response}");
         }
 
         private void Commands_ChatCommand(object sender, OnChatCommandReceivedArgs e)
         {
-            // TODO: Relay a list of commands
+            var commands = this.chatCommands.Select(c => c.Identifier);
+            this.Client.SendMessage(e.Command.ChatMessage.Channel, $"Commands: !{string.Join(", !", commands)}");
+
+            // TODO: Integrate with gist and update a gist with a list of all of the commands and aliases. Relay this instead of a full list.
         }
 
         private void Command_ChatCommand(object sender, OnChatCommandReceivedArgs e)
         {
-            // TODO: Implement adding, updating, and removing commands.
+            // !command {set/clear} {command} {if arg[0] = set: message}
+            var args = e.Command.ArgumentsAsList;
+
+            if (args.Count >= 2)
+            {
+                var action = args[0];
+                var alteredCommand = args[1];
+                switch (action)
+                {
+                    case "set":
+
+                        if (args.Count >= 3)
+                        {
+                            var message = args[2];
+
+                            if (e.Command.ChatMessage.IsBroadcaster || (e.Command.ChatMessage.IsModerator && Settings.ModsSetChatCommands))
+                            {
+                                // set commands
+                                var setCommand = this.FindChatCommand(alteredCommand);
+                                if (setCommand == null)
+                                {
+                                    // the command doesnt exist, so lets just add a new command
+                                    this.chatCommands.Add(new MChatCommand(alteredCommand, message));
+                                    this.ChatClient.SendMessage(e.Command.ChatMessage.Channel, $"Added command: !{alteredCommand}");
+                                    Settings.SaveCommands(this.chatCommands);
+                                }
+                                else
+                                {
+                                    // the command already exists, so replace it with the updated command.
+                                    this.chatCommands.Remove(setCommand);
+                                    this.chatCommands.Add(new MChatCommand(alteredCommand, message));
+                                    this.ChatClient.SendMessage(e.Command.ChatMessage.Channel, $"Updated command: !{alteredCommand}");
+                                    Settings.SaveCommands(this.chatCommands);
+                                }
+                            }
+                        }
+
+                        break;
+                    case "clear":
+
+                        if (e.Command.ChatMessage.IsBroadcaster || (e.Command.ChatMessage.IsModerator && Settings.ModsRemoveChatCommands))
+                        {
+                            var clearedCommand = this.FindChatCommand(alteredCommand);
+                            if (clearedCommand != null)
+                            {
+                                this.chatCommands.Remove(clearedCommand);
+                                this.ChatClient.SendMessage(e.Command.ChatMessage.Channel, $"Cleared command: !{alteredCommand}");
+                                Settings.SaveCommands(this.chatCommands);
+                            }
+                        }
+
+                        break;
+                }
+            }
         }
 
         private void Alias_ChatCommand(object sender, OnChatCommandReceivedArgs e)
         {
-            // TODO: Implement command aliasing.
+            // !alias {set/clear} {alias} {if arg[0] = set: command}
+            var args = e.Command.ArgumentsAsList;
+
+            if (args.Count >= 2)
+            {
+                var action = args[0];
+                var alteredAlias = args[1];
+                switch (action)
+                {
+                    case "set":
+
+                        if (args.Count >= 3)
+                        {
+                            var otherCommand = args[2];
+
+                            if (e.Command.ChatMessage.IsBroadcaster || (e.Command.ChatMessage.IsModerator && Settings.ModsSetAliases))
+                            {
+                                // set commands
+                                var setAlias = this.FindAlias(alteredAlias);
+                                if (setAlias == null)
+                                {
+                                    // the command doesnt exist, so lets just add a new alias
+                                    this.aliases.Add(new Alias(otherCommand, alteredAlias));
+                                    this.ChatClient.SendMessage(e.Command.ChatMessage.Channel, $"Added alias: !{alteredAlias} aliases !{otherCommand}");
+                                    Settings.SaveAliases(this.aliases);
+                                }
+                                else
+                                {
+                                    // the alias already exists, so replace it with the updated alias.
+                                    this.aliases.Remove(setAlias);
+                                    this.aliases.Add(new Alias(otherCommand, alteredAlias));
+                                    this.ChatClient.SendMessage(e.Command.ChatMessage.Channel, $"Updated alias: !{alteredAlias} aliases !{otherCommand}");
+                                    Settings.SaveAliases(this.aliases);
+                                }
+                            }
+                        }
+
+                        break;
+                    case "clear":
+
+                        if (e.Command.ChatMessage.IsBroadcaster || (e.Command.ChatMessage.IsModerator && Settings.ModsRemoveAliases))
+                        {
+                            var clearedAlias = this.FindAlias(alteredAlias);
+                            if (clearedAlias != null)
+                            {
+                                this.aliases.Remove(clearedAlias);
+                                this.ChatClient.SendMessage(e.Command.ChatMessage.Channel, $"Cleared alias: !{alteredAlias}");
+                                Settings.SaveAliases(this.aliases);
+                            }
+                        }
+
+                        break;
+                }
+            }
+        }
+
+        private void Permission_ChatCommand(object sender, OnChatCommandReceivedArgs e)
+        {
+            // !permission {command} {group:host|mod|sub|all}
+            var args = e.Command.ArgumentsAsList;
+            if (args.Count >= 2)
+            {
+                var permCommand = args[0];
+                Group group;
+                switch (args[1])
+                {
+                    case "host":
+                        group = Group.Broadcaster;
+                        break;
+                    case "mod":
+                        group = Group.Moderator;
+                        break;
+                    case "sub":
+                        group = Group.Subscriber;
+                        break;
+                    case "all":
+                        group = Group.Viewer;
+                        break;
+                    default:
+                        return;
+                }
+
+                var permission = this.FindPermissionFromCommand(permCommand) ?? this.FindPermissionFromAlias(permCommand);
+                if (permission != null)
+                {
+                    this.permissions.Remove(permission);
+                }
+
+                this.permissions.Add(new Permission(permCommand, group));
+
+                this.Client.SendMessage(e.Command.ChatMessage.Channel, $"Permissions updated for {permCommand} to {group.ToString()}.");
+                Settings.SavePermissions(this.permissions);
+            }
         }
 
         private void Login_TwitchAuthenticated(object sender, TwitchAuthenticatedEventArgs e)
@@ -246,36 +537,126 @@
             }
         }
 
-        private void AuthenticateTwitch(string idToken, string scope, string state, string nonce)
-        {
-            MessageBox.Show("Wow!");
-        }
-
-        private void FirstTimeSetup()
-        {
-            // Show first-time short guide after getting logged in.
-            // Ask if the user wants to use their account or another account for the chat bot.
-            // if the user wants to use another account, have them sign in with the other account.
-        }
-
         private void Client_OnReSubscriber(object sender, OnReSubscriberArgs e)
         {
-            // TODO: Implement resub message
+            // replace {resubscriber} with subscriber displayname
+            // replace {tier} with Twitch Prime, $4.99, $14.99 $24.99
+            // replace {length} with months
+            // replace {emote#} with random/selected emote
+            var message = Settings.ResubMessage;
+
+            var tier = "Twitch Prime";
+            if (!e.ReSubscriber.IsTwitchPrime)
+            {
+                switch (e.ReSubscriber.SubscriptionPlan)
+                {
+                    case SubscriptionPlan.Tier1:
+                        tier = "$4.99";
+                        break;
+                    case SubscriptionPlan.Tier2:
+                        tier = "$14.99";
+                        break;
+                    case SubscriptionPlan.Tier3:
+                        tier = "$24.99";
+                        break;
+                }
+            }
+
+            message = message.Replace("{resubscriber}", e.ReSubscriber.DisplayName)
+                .Replace("{tier}", tier)
+                .Replace("{length}", $"{e.ReSubscriber.Months} {(e.ReSubscriber.Months == 1 ? "Month" : "Months")}");
+
+            // !TODO: Use regex to find the {emote#} pattern and replace with selected emotes.
+            this.ChatClient.SendMessage(e.ReSubscriber.Channel, message);
         }
 
         private void Client_OnNewSubscriber(object sender, OnNewSubscriberArgs e)
         {
-            // TODO: Implement sub message
+            // replace {subscriber} with subscriber displayname
+            // replace {tier} with Twitch Prime, $4.99, $14.99 $24.99
+            // replace {emote#} with random/selected emote
+            var message = Settings.SubMessage;
+
+            var tier = "Twitch Prime";
+            if (!e.Subscriber.IsTwitchPrime)
+            {
+                switch (e.Subscriber.SubscriptionPlan)
+                {
+                    case SubscriptionPlan.Tier1:
+                        tier = "$4.99";
+                        break;
+                    case SubscriptionPlan.Tier2:
+                        tier = "$14.99";
+                        break;
+                    case SubscriptionPlan.Tier3:
+                        tier = "$24.99";
+                        break;
+                }
+            }
+
+            message = message.Replace("{subscriber}", e.Subscriber.DisplayName)
+                .Replace("{tier}", tier);
+
+            // !TODO: Use regex to find the {emote#} pattern and replace with selected emotes.
+            this.ChatClient.SendMessage(e.Subscriber.Channel, message);
         }
 
-        private void Client_OnWhisperCommandReceived(object sender, OnWhisperCommandReceivedArgs e)
+        private void Client_OnGiftedSubscription(object sender, OnGiftedSubscriptionArgs e)
         {
-            // TODO: Implement command system
+            // TODO: Implement gifted subscription messages. Currently the GiftedSubscription type does not contain the information we need.
         }
 
         private void Client_OnChatCommandReceived(object sender, OnChatCommandReceivedArgs e)
         {
-            // TODO: Implement command system
+            // is a valid command only if it exists as an alias or as a command
+            dynamic command = null;
+            var alias = this.FindAlias(e.Command.CommandText);
+            if (alias != null)
+            {
+                if (this.TryChatCommandFromAlias(alias, out var chatCommand))
+                {
+                    command = chatCommand;
+                }
+                else if (this.TryBuiltinCommandFromAlias(alias, out var builtinCommand))
+                {
+                    command = builtinCommand;
+                }
+            }
+            else
+            {
+                command = this.FindChatCommand(e.Command.CommandText);
+
+                if (command == null)
+                {
+                    command = this.FindBuiltinCommand(e.Command.CommandText);
+                }
+            }
+
+            if (command != null && this.ValidPermissions(e.Command.ChatMessage, this.FindPermissionFromCommand(command.Identifier)))
+            {
+                // we've confirmed its a valid command and the user has permissions, thus we can begin executing it.
+
+                // we can ignore the command delay if the user is a mod or the broadcaster, we're only worried about
+                // spam from regular viewers and maybe subscribers.
+                var ignoreDelay = e.Command.ChatMessage.IsModerator || e.Command.ChatMessage.IsBroadcaster;
+
+                if (ignoreDelay || !this.CommandTimedout(e.Command.CommandText))
+                {
+                    if (command is Command builtinCommand)
+                    {
+                        builtinCommand.Callback?.Invoke(this, e);
+                    }
+                    else if (command is MChatCommand chatCommand)
+                    {
+                        this.Client.SendMessage(e.Command.ChatMessage.Channel, chatCommand.Message);
+                    }
+
+                    if (!ignoreDelay)
+                    {
+                        this.TimeoutCommand(e.Command.CommandText);
+                    }
+                }
+            }
         }
 
         private void TrayIcon_Exit(object sender, EventArgs e)
@@ -285,7 +666,7 @@
 
         private void TrayIcon_About(object sender, EventArgs e)
         {
-            // TODO: Show About window
+            this.About.Show();
         }
 
         private void TrayIcon_CheckForUpdates(object sender, EventArgs e)
