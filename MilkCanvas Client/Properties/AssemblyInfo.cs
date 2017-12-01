@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MilkCanvas Client")]
+[assembly: AssemblyTitle("MilkCanvas Desktop")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Tristen Horton")]
-[assembly: AssemblyProduct("MilkCanvas Client")]
+[assembly: AssemblyProduct("MilkCanvas Desktop")]
 [assembly: AssemblyCopyright("Copyright © Tristen Horton 2017.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
