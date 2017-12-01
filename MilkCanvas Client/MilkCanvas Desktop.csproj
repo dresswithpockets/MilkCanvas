@@ -7,7 +7,7 @@
     <ProjectGuid>{F9DE8AF5-9645-4532-85F0-1DB67B57A2C7}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>MilkCanvas</RootNamespace>
-    <AssemblyName>MilkCanvas Client</AssemblyName>
+    <AssemblyName>MilkCanvas Desktop</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -102,7 +102,14 @@
     <Compile Include="Controls\TablessTabControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Enums\Group.cs" />
     <Compile Include="Enums\SocialPlatform.cs" />
+    <Compile Include="Forms\About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\BaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -121,7 +128,11 @@
     <Compile Include="Forms\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Alias.cs" />
+    <Compile Include="Models\ChatCommand.cs" />
     <Compile Include="Models\Command.cs" />
+    <Compile Include="Models\CommandTimeout.cs" />
+    <Compile Include="Models\Permission.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="Events\TwitchAuthenticatedEventArgs.cs" />
     <Compile Include="Models\TwitchHashFile.cs" />
@@ -145,6 +156,9 @@
     <Compile Include="Models\TwitchFragment.cs" />
     <EmbeddedResource Include="Controls\ActionBar.resx">
       <DependentUpon>ActionBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\About.resx">
+      <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BaseForm.resx">
       <DependentUpon>BaseForm.cs</DependentUpon>
@@ -208,6 +222,7 @@
     <Content Include="Pages\twitch.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\Logo.png" />
     <Content Include="Scripts\selfhost.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
