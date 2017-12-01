@@ -1,34 +1,39 @@
 ﻿namespace MilkCanvas.Models
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+
+    using Newtonsoft.Json;
 
     using TwitchLib.Events.Client;
-    using TwitchLib.Models.Client;
 
     public class Command
     {
+        [JsonProperty]
+        private string identifier;
+
+        [JsonProperty]
+        private string description;
+
+        [JsonProperty]
+        private EventHandler<OnChatCommandReceivedArgs> callback;
+
         public Command(
             string identifier,
             string description,
-            EventHandler<OnChatCommandReceivedArgs> chatCommand,
-            EventHandler<OnWhisperCommandReceivedArgs> whisperCommand = null)
+            EventHandler<OnChatCommandReceivedArgs> callback)
         {
-            this.Identifier = identifier;
-            this.Description = description;
-            this.ChatCommandReceived = chatCommand;
-            this.WhisperCommandReceived = whisperCommand;
+            this.identifier = identifier;
+            this.description = description;
+            this.callback = callback;
         }
 
-        public string Identifier { get; }
+        [JsonIgnore]
+        public string Identifier => this.identifier;
 
-        public string Description { get; }
+        [JsonIgnore]
+        public string Description => this.description;
 
-        public EventHandler<OnChatCommandReceivedArgs> ChatCommandReceived { get; }
-
-        public EventHandler<OnWhisperCommandReceivedArgs> WhisperCommandReceived { get; }
+        [JsonIgnore]
+        public EventHandler<OnChatCommandReceivedArgs> Callback => this.callback;
     }
 }
