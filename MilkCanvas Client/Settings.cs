@@ -93,7 +93,7 @@
 
         public static void SaveFileText(string path, string text)
         {
-            using (var file = File.Open(path, FileMode.Open, FileAccess.Write, FileShare.None))
+            using (var file = File.Open(path, FileMode.Create, FileAccess.Write, FileShare.None))
             using (var writer = new StreamWriter(file))
             {
                 writer.WriteAsync(text);
