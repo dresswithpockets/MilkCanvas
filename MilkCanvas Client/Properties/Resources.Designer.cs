@@ -111,6 +111,16 @@ namespace MilkCanvas.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Logo {
+            get {
+                object obj = ResourceManager.GetObject("Logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon MilkIcon {
@@ -145,15 +155,6 @@ namespace MilkCanvas.Properties {
         internal static string TwitchScope {
             get {
                 return ResourceManager.GetString("TwitchScope", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 4uw0o7kd63pqndwyrgren46qkk3lek.
-        /// </summary>
-        internal static string TwitchSecret {
-            get {
-                return ResourceManager.GetString("TwitchSecret", resourceCulture);
             }
         }
         

@@ -121,34 +121,34 @@
   <data name="GettingStarted1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\assets\gettingstarted1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="GettingStarted2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\assets\gettingstarted2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="MilkIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\milkicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="GettingStarted3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\assets\gettingstarted3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Glitch_White_RGB" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Assets\Glitch_White_RGB.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Glitch_White_RGB_padded" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Assets\Glitch_White_RGB_padded.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="MilkIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\assets\milkicon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="MixerMerge_White" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\MixerMerge_White.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="TwitchClient" xml:space="preserve">
-    <value>cmrmfa5ue5vavkk3vqzi0fsvlk0zso</value>
   </data>
   <data name="TwitchScope" xml:space="preserve">
     <value>user:edit+user:read:email+openid+channel_check_subscription+channel_commercial+channel_editor+channel_feed_edit+channel_feed_read+channel_subscriptions+chat_login</value>
   </data>
-  <data name="TwitchSecret" xml:space="preserve">
-    <value>4uw0o7kd63pqndwyrgren46qkk3lek</value>
-  </data>
   <data name="yt_icon_mono_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\yt_icon_mono_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TwitchClient" xml:space="preserve">
+    <value>cmrmfa5ue5vavkk3vqzi0fsvlk0zso</value>
+  </data>
+  <data name="Glitch_White_RGB_padded" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Assets\Glitch_White_RGB_padded.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Glitch_White_RGB" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Assets\Glitch_White_RGB.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GettingStarted2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\assets\gettingstarted2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
