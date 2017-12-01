@@ -15,31 +15,85 @@
 
     public static class Settings
     {
-        private const string commandsPath = "commands.json";
+        private const string chatCommandsPath = "commands.json";
+        private const string permissionsPath = "permissions.json";
+        private const string aliasesPath = "aliases.json";
         private const string launchedKey = "Launched";
         private const string stateKey = "State";
         private const string twitchSubjectKey = "TwitchSubject";
         private const string twitchAccessTokenKey = "TwitchAccessToken";
 
+        private const string subMessageKey = "SubMessage";
+        private const string resubMessageKey = "ResubMessage";
+        private const string giftedSubMessageKey = "GiftedSubMessage";
+        private const string commandDelayKey = "CommandDelay";
+
+        private const string exemptModsFromDelayKey = "ExemptModsFromDelay";
+        private const string modsSetChatCommandsKey = "ModsSetChatCommands";
+        private const string modsRemoveChatCommandsKey = "ModsRemoveChatCommands";
+        private const string modsSetAliasesKey = "ModsSetAliases";
+        private const string modsRemoveAliasesKey = "ModsRemoveAliases";
+
         private static readonly Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
 
-        private static readonly Lazy<Command[]> commands = new Lazy<Command[]>(() => JsonConvert.DeserializeObject<Command[]>(ReadFileText(commandsPath)));
+        private static readonly Lazy<ChatCommand[]> chatCommands = new Lazy<ChatCommand[]>(() => JsonConvert.DeserializeObject<ChatCommand[]>(ReadFileText(chatCommandsPath), new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects }));
+        private static readonly Lazy<Permission[]> permissions = new Lazy<Permission[]>(() => JsonConvert.DeserializeObject<Permission[]>(ReadFileText(permissionsPath)));
+        private static readonly Lazy<Alias[]> aliases = new Lazy<Alias[]>(() => JsonConvert.DeserializeObject<Alias[]>(ReadFileText(aliasesPath)));
 
-        public static Command[] Commands => commands.Value;
+        public static ChatCommand[] ChatCommands => chatCommands.Value;
 
-        public static bool CommandsExist => File.Exists(commandsPath);
+        public static Permission[] Permissions => permissions.Value;
+
+        public static Alias[] Aliases => aliases.Value;
+
+        public static bool ChatCommandsExist => File.Exists(chatCommandsPath);
+
+        public static bool PermissionsExist => File.Exists(permissionsPath);
+
+        public static bool AliasesExists => File.Exists(aliasesPath);
 
         public static bool FirstLaunch => GetSetting(launchedKey) == null;
 
-        public static string State => GetSetting(stateKey)?.Value ?? null;
+        public static string State => GetSetting(stateKey)?.Value;
 
-        public static string TwitchSubject => GetSetting(twitchSubjectKey)?.Value ?? null;
+        public static string TwitchSubject => GetSetting(twitchSubjectKey)?.Value;
 
-        public static string TwitchAccessToken => GetSetting(twitchAccessTokenKey)?.Value ?? null;
+        public static string TwitchAccessToken => GetSetting(twitchAccessTokenKey)?.Value;
+
+        public static string SubMessage => GetSetting(subMessageKey)?.Value;
+
+        public static string ResubMessage => GetSetting(resubMessageKey)?.Value;
+
+        public static string GiftedSubMessage => GetSetting(giftedSubMessageKey)?.Value;
+
+        public static float CommandDelay => float.Parse(GetSetting(commandDelayKey)?.Value ?? "0");
+
+        public static bool ExemptModsFromDelay => bool.TrueString.Equals(GetSetting(exemptModsFromDelayKey)?.Value);
+
+        public static bool ModsSetChatCommands => bool.TrueString.Equals(GetSetting(modsSetChatCommandsKey)?.Value);
+
+        public static bool ModsRemoveChatCommands => bool.TrueString.Equals(GetSetting(modsRemoveChatCommandsKey)?.Value);
+
+        public static bool ModsSetAliases => bool.TrueString.Equals(GetSetting(modsSetAliasesKey)?.Value);
+
+        public static bool ModsRemoveAliases => bool.TrueString.Equals(GetSetting(modsRemoveAliasesKey)?.Value);
 
         public static KeyValueConfigurationElement GetSetting(string key) => config.AppSettings.Settings[key];
 
-        public static void Save(bool? firstLaunch = null, string state = null, string twitchSubject = null, string twitchAccessToken = null)
+        public static void Save(
+            bool? firstLaunch = null,
+            string state = null,
+            string twitchSubject = null,
+            string twitchAccessToken = null,
+            string subMessage = null,
+            string resubMessage = null,
+            string giftedSubMessage = null,
+            float? commandDelay = null,
+            bool? exemptModsFromDelay = null,
+            bool? modsSetChatCommands = null,
+            bool? modsRemoveChatCommands = null,
+            bool? modsSetAliases = null,
+            bool? modsRemoveAliases = null)
         {
             if (firstLaunch.HasValue)
             {
@@ -61,12 +115,27 @@
                 UpdateSetting(twitchAccessTokenKey, twitchAccessToken);
             }
 
+            if (commandDelay != null)
+            {
+                UpdateSetting(commandDelayKey, commandDelay.Value.ToString());
+            }
+
             config.Save();
         }
 
-        public static void SaveCommands(Command[] cmds)
+        public static void SaveCommands(List<ChatCommand> cmds)
         {
-            SaveFileText(commandsPath, JsonConvert.SerializeObject(cmds));
+            SaveFileText(chatCommandsPath, JsonConvert.SerializeObject(cmds));
+        }
+
+        public static void SavePermissions(List<Permission> permissions)
+        {
+            SaveFileText(permissionsPath, JsonConvert.SerializeObject(permissions));
+        }
+
+        public static void SaveAliases(List<Alias> aliases)
+        {
+            SaveFileText(aliasesPath, JsonConvert.SerializeObject(aliases));
         }
 
         public static void UpdateSetting(string key, string value)
