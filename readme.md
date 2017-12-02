@@ -95,11 +95,11 @@ There are some variables you can use here, too.
  
 Toggle this checkbox and fill in the text box below with a message to relay every time you get a gifted subscriber. Messages are relayed in chat by the selected Chatbot. 
  
-## Timeout Commands to Prevent Spam 
+### Timeout Commands to Prevent Spam 
  
 Toggle this checkbox and change the numeric counter below to the number of seconds you'd like commands to be delayed in their next useage. 
  
-## Reconnect MilkCanvas if Connection is Lost 
+### Reconnect MilkCanvas if Connection is Lost 
  
 Toggle this checkbox and change the numeric counter below to the number of seconds you'd like MilkCanvas to wait before retrying to connect. 
  
