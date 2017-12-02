@@ -1,6 +1,6 @@
 ﻿namespace MilkCanvas.Enums
 {
-    public enum Group
+    public enum UserGroup
     {
         Broadcaster,
 

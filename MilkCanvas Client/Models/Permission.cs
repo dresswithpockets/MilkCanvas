@@ -10,18 +10,18 @@
         private string command;
 
         [JsonProperty]
-        private Group group;
+        private UserGroup group;
 
-        public Permission(string command, Group group)
+        public Permission(string command, UserGroup group)
         {
             this.command = command;
             this.group = group;
         }
 
         [JsonIgnore]
-        public string Command => command;
+        public string Command => this.command;
 
         [JsonIgnore]
-        public Group Group => group;
+        public UserGroup Group => this.group;
     }
 }
