@@ -133,6 +133,8 @@
     <Compile Include="Models\Command.cs" />
     <Compile Include="Models\CommandTimeout.cs" />
     <Compile Include="Models\Permission.cs" />
+    <Compile Include="Models\SubscriberEmote.cs" />
+    <Compile Include="Models\SubscriberEmotes.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="Events\TwitchAuthenticatedEventArgs.cs" />
     <Compile Include="Models\TwitchHashFile.cs" />
@@ -154,6 +156,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Models\TwitchFragment.cs" />
+    <Compile Include="Utility.cs" />
     <EmbeddedResource Include="Controls\ActionBar.resx">
       <DependentUpon>ActionBar.cs</DependentUpon>
     </EmbeddedResource>
