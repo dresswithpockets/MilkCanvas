@@ -7,9 +7,11 @@
     using System.Net;
     using System.Text;
     using System.Threading.Tasks;
+    using TwitchLib;
 
     public class Utility
     {
+
         public static string Get(string uri)
         {
             var request = (HttpWebRequest)WebRequest.Create(uri);
@@ -34,6 +36,11 @@
             {
                 return await reader.ReadToEndAsync();
             }
+        }
+
+        public static string GetDisplayNameFromID(TwitchAPI api, string userid)
+        {
+            return api.Users.v5.GetUserByIDAsync(userid).GetAwaiter().GetResult().DisplayName;
         }
     }
 }
