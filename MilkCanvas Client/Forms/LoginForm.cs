@@ -35,14 +35,6 @@
             // generate by the redirect from the twitch API.
             File.Delete(this.hashFile);
 
-            // here we're setting up a service to receive the user's redirect at
-            // because there is useful web response from twitch's authentication.
-            // Rather, users are automaticaly redirected with the information we need
-            // as parameters of the URL.
-            var express = Edge.Func(Settings.Scripts.Selfhost);
-
-            express(8080).Wait();
-
             // nonce is a verification value used to avoid replay attacks in OpenID.
             // state is a token used to avoid replay attacks in OAuth.
             // any party can respond with a nonce and state, mismatched values will result in failure.
