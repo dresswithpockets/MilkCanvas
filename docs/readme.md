@@ -30,7 +30,7 @@ If you've already logged into MilkCanvas using your streaming account, you're al
 
 By default, chat commands and messages relayed via MilkCanvas will be sent through your main account.
 
-If you don't want this behaviour and have a secondary account specifically for chat bot, check out [Alternate Account for Chatbot](#alternate-account-for-chatbot)
+If you don't want this behaviour and have a secondary account specifically for chat bot, check out [Authorizing a Chatbot](#alternate-account-for-chatbot)
 
 ### Built-In Commands
 
@@ -54,56 +54,6 @@ Toggle this checkbox on if you want to use another account for the chatbot.
 Adjacent to the checkbox is a Twitch Connect button. Click this button to be taken to a new page to authorize your alternate account.
 
 **IMPORTANT: Log out of your main twitch account in your web browser. It will automatically authorize your main twitch account if you're still logged into it.**
-
-### Relay Message After a New Subscription
-
-Toggle this checkbox and fill in the text box below with a message to relay every time you get a new subscriber. Messages are relayed in chat by the Chatbot.
-
-There are some variables you can use here, too.
-
-```
-{subscriber} - returns the name of the new subscriber.
-
-{tier} - returns Twitch Prime, $4.99, $14.99, or $24.99.
-
-{emote} - returns a random emote from the channel's emote set.
-
-{emote#} - replace # with a number greater than 0. returns a random emote from the channel's emote set for each number. Numbers that are reused will use the same emote each time. 
-```
-
-### Relay Message After a Resubscription
-
-Toggle this checkbox and fill in the text box below with a message to relay every time you get a resubscriber. Messages are relayed in chat by the selected Chatbot.
-
-There are some variables you can use here, too.
-
-```
-{resubscriber} - returns the name of the resubscriber.
-
-{length} - returns the number of months the user has been subbed.
-
-{tier} - returns Twitch Prime, $4.99, $14.99, or $24.99.
-
-{emote} - returns a random emote from the channel's emote set.
-
-{emote#} - replace # with a number greater than 0. returns a random emote from the channel's emote set for each number. Numbers that are reused will use the same emote each time. 
-```
-
-### Relay Message After a Gifted Subscription
-
-***This feature is not live yet.***
-
-Toggle this checkbox and fill in the text box below with a message to relay every time you get a gifted subscriber. Messages are relayed in chat by the selected Chatbot.
-
-## Timeout Commands to Prevent Spam
-
-Toggle this checkbox and change the numeric counter below to the number of seconds you'd like commands to be delayed in their next useage.
-
-## Reconnect MilkCanvas if Connection is Lost
-
-Toggle this checkbox and change the numeric counter below to the number of seconds you'd like MilkCanvas to wait before retrying to connect.
-
-**10 seconds is the recommended delay.**
 
 ## Built-in Commands
 
