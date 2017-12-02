@@ -3,16 +3,20 @@
     using System;
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using System.Windows.Forms;
-
+    using EdgeJs;
     using MilkCanvas;
     using MilkCanvas.Enums;
     using MilkCanvas.Events;
     using MilkCanvas.Models;
+
+    using Newtonsoft.Json;
 
     using TwitchLib;
     using TwitchLib.Enums;
@@ -27,12 +31,15 @@
     /// </summary>
     public class TrayContext : Form
     {
+        private const string emotePattern = @"\{emote(\d+)\}";
+
         private bool disposed;
-        private List<Models.ChatCommand> chatCommands;
+        private List<MChatCommand> chatCommands;
         private List<Command> builtinCommands;
         private List<Alias> aliases;
         private List<Permission> permissions;
         private List<CommandTimeout> timeouts;
+        private List<SubscriberEmote> emotes;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TrayContext"/> class.
@@ -42,6 +49,8 @@
             this.Initialize();
         }
 
+        public TwitchAPI API { get; private set; }
+
         private LoginForm Login { get; set; }
 
         private GettingStartedForm GettingStarted { get; set; }
@@ -49,8 +58,6 @@
         private TwitchClient Client { get; set; }
 
         private TwitchClient ChatClient { get; set; }
-
-        private TwitchAPI API { get; set; }
 
         private ConnectionCredentials Credentials { get; set; }
 
@@ -61,6 +68,8 @@
         private ContextMenu IconMenu { get; set; }
 
         private About About { get; set; }
+
+        private Canvas Canvas { get; set; }
 
         private string IconText => "MilkCanvas Client";
 
@@ -79,8 +88,9 @@
             this.API = new TwitchAPI(twitchClient, access);
             var user = await this.API.Users.v5.GetUserByIDAsync(subject);
 
-            var credentials = new ConnectionCredentials(user.Name, access);
-            this.Client = new TwitchClient(credentials, channel: user.Name);
+            this.Credentials = new ConnectionCredentials(user.Name, access);
+            this.Client = new TwitchClient(this.Credentials, channel: user.Name);
+            this.Client.OnJoinedChannel += this.Client_OnJoinedChannel;
             this.Client.OnNewSubscriber += this.Client_OnNewSubscriber;
             this.Client.OnReSubscriber += this.Client_OnReSubscriber;
             this.Client.OnChatCommandReceived += this.Client_OnChatCommandReceived;
@@ -88,8 +98,18 @@
 
             this.Client.Connect();
 
-            // TODO: Update ChatClient if the user wants to have a secondary bot account used for chat.
-            this.ChatClient = this.Client;
+            var altId = Settings.AltTwitchSubject;
+            var altAccess = Settings.AltTwitchAccessToken;
+            if (Settings.UseAlternateAccount && altId != null && altAccess != null)
+            {
+                var creds = new ConnectionCredentials(Utility.GetDisplayNameFromID(this.API, altId), altAccess);
+                this.ChatClient = new TwitchClient(creds, channel: user.Name);
+                this.ChatClient.Connect();
+            }
+            else
+            {
+                this.ChatClient = this.Client;
+            }
 
             if (save)
             {
@@ -99,6 +119,8 @@
                     twitchSubject: subject,
                     twitchAccessToken: access);
             }
+
+            this.Canvas = new Canvas(this);
         }
 
         public MChatCommand FindChatCommand(string identifier)
@@ -151,7 +173,7 @@
 
         public void TimeoutCommand(string command)
         {
-            var timer = new STimer(Settings.CommandDelay);
+            var timer = new STimer(Settings.CommandDelay * 1000);
             timer.Elapsed += (sender, e) =>
             {
                 this.RemoveCommandTimeout(command);
@@ -175,12 +197,20 @@
         {
             switch (permission?.Group)
             {
-                case Group.Broadcaster: return chat.IsBroadcaster;
-                case Group.Moderator: return chat.IsBroadcaster || chat.IsModerator;
-                case Group.Subscriber: return chat.IsBroadcaster || chat.IsModerator || chat.IsSubscriber;
-                case Group.Viewer: return true;
+                case UserGroup.Broadcaster: return chat.IsBroadcaster;
+                case UserGroup.Moderator: return chat.IsBroadcaster || chat.IsModerator;
+                case UserGroup.Subscriber: return chat.IsBroadcaster || chat.IsModerator || chat.IsSubscriber;
+                case UserGroup.Viewer: return true;
                 default: return true;
             }
+        }
+
+        public void AlterChatbot(string username, string accessToken)
+        {
+            var creds = new ConnectionCredentials(username, accessToken);
+            this.ChatClient = new TwitchClient(creds, channel: this.Credentials.TwitchUsername);
+
+            this.ChatClient.Connect();
         }
 
         /// <summary>
@@ -277,6 +307,9 @@
                 this.aliases = new List<Alias>();
             }
 
+            this.timeouts = new List<CommandTimeout>();
+            this.emotes = new List<SubscriberEmote>();
+
             this.SetupBuiltinCommands();
 
             this.Config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
@@ -304,6 +337,15 @@
             this.IconMenu.MenuItems.Add("About", this.TrayIcon_About);
             this.IconMenu.MenuItems.Add("-");
             this.IconMenu.MenuItems.Add("Exit", this.TrayIcon_Exit);
+            this.TrayIcon.DoubleClick += this.TrayIcon_Canvas;
+
+            // here we're setting up a service to receive the user's redirect at
+            // because there is useful web response from twitch's authentication.
+            // Rather, users are automaticaly redirected with the information we need
+            // as parameters of the URL.
+            var express = Edge.Func(Settings.Scripts.Selfhost);
+
+            express(8080).Wait();
 
             // FirstLaunch is a special property that handles getting the launch state of the app
             // from the app config. If there is a launch value already saved then this app has been launched before
@@ -333,6 +375,46 @@
             this.builtinCommands.Add(new Command("command", "Handles the creation, deleting and update of chat commands.", this.Command_ChatCommand));
             this.builtinCommands.Add(new Command("alias", "Creates or removes aliases for existing commands.", this.Alias_ChatCommand));
             this.builtinCommands.Add(new Command("permission", "Changes the permissions required to run a command.", this.Permission_ChatCommand));
+            this.builtinCommands.Add(new Command("bookmark", "Flags the current timestamp in the stream and saves it.", this.Bookmark_ChatCommand));
+        }
+
+        private string ReplaceEmotes(string message)
+        {
+            var rand = new Random();
+
+            message.Replace("{emote}", this.emotes[rand.Next(this.emotes.Count)].Code);
+
+            var emotes = new Dictionary<int, string>();
+            var matchEmotes = new Regex(emotePattern).Match(message);
+            foreach (Group group in matchEmotes.Groups)
+            {
+                if (group.Success && int.TryParse(group.Value, out var value))
+                {
+                    // we want to reuse numbers. i.e if the channel has 15 emotes but the user has
+                    // {emote20} then thats equivelent to {emote5}.
+                    value %= this.emotes.Count;
+
+                    // reuse tags that already have emotes. i.e if we've seen {emote5} before then don't
+                    // allocate a new emote for it and just replace it with what we've used before.
+                    string emote = string.Empty;
+                    if (!emotes.TryGetValue(value, out emote))
+                    {
+                        // guarantee that the newly allocated emote is unique in the dictionary
+                        // so that we're not duplicating the emote in the message.
+                        while (!emotes.ContainsValue(emote))
+                        {
+                            emote = this.emotes[rand.Next(this.emotes.Count)].Code;
+                        }
+
+                        emotes.Add(value, emote);
+                    }
+
+                    // finally, replace the instance of {emote#} where # is the value with the allocated emote.
+                    message.Replace($"{{emote{value}}}", emote);
+                }
+            }
+
+            return message;
         }
 
         private async void Uptime_ChatCommand(object sender, OnChatCommandReceivedArgs e)
@@ -350,13 +432,13 @@
                 response = "Stream is offline!";
             }
 
-            this.Client.SendMessage($"@{e.Command.ChatMessage.DisplayName} {response}");
+            this.ChatClient.SendMessage($"@{e.Command.ChatMessage.DisplayName} {response}");
         }
 
         private void Commands_ChatCommand(object sender, OnChatCommandReceivedArgs e)
         {
             var commands = this.chatCommands.Select(c => c.Identifier);
-            this.Client.SendMessage(e.Command.ChatMessage.Channel, $"Commands: !{string.Join(", !", commands)}");
+            this.ChatClient.SendMessage(e.Command.ChatMessage.Channel, $"Commands: !{string.Join(", !", commands)}");
 
             // TODO: Integrate with gist and update a gist with a list of all of the commands and aliases. Relay this instead of a full list.
         }
@@ -484,20 +566,20 @@
             if (args.Count >= 2)
             {
                 var permCommand = args[0];
-                Group group;
+                UserGroup group;
                 switch (args[1])
                 {
                     case "host":
-                        group = Group.Broadcaster;
+                        group = UserGroup.Broadcaster;
                         break;
                     case "mod":
-                        group = Group.Moderator;
+                        group = UserGroup.Moderator;
                         break;
                     case "sub":
-                        group = Group.Subscriber;
+                        group = UserGroup.Subscriber;
                         break;
                     case "all":
-                        group = Group.Viewer;
+                        group = UserGroup.Viewer;
                         break;
                     default:
                         return;
@@ -511,16 +593,22 @@
 
                 this.permissions.Add(new Permission(permCommand, group));
 
-                this.Client.SendMessage(e.Command.ChatMessage.Channel, $"Permissions updated for {permCommand} to {group.ToString()}.");
+                this.ChatClient.SendMessage(e.Command.ChatMessage.Channel, $"Permissions updated for {permCommand} to {group.ToString()}.");
                 Settings.SavePermissions(this.permissions);
             }
+        }
+
+        private void Bookmark_ChatCommand(object sender, OnChatCommandReceivedArgs e)
+        {
+            // TODO: Implement stream bookmarking.
         }
 
         private void Login_TwitchAuthenticated(object sender, TwitchAuthenticatedEventArgs e)
         {
             if (Settings.FirstLaunch)
             {
-                this.GettingStarted.Show();
+                // this.GettingStarted.Show();
+                //Process.Start("https://phxvyper.github.io/MilkCanvas");
             }
 
             this.TwitchSetup(Properties.Resources.TwitchClient, e.Hash.AccessToken, e.Hash.Fragment.Subject, e.Hash.State, true);
@@ -537,73 +625,99 @@
             }
         }
 
-        private void Client_OnReSubscriber(object sender, OnReSubscriberArgs e)
+        private void Client_OnJoinedChannel(object sender, OnJoinedChannelArgs e)
         {
-            // replace {resubscriber} with subscriber displayname
-            // replace {tier} with Twitch Prime, $4.99, $14.99 $24.99
-            // replace {length} with months
-            // replace {emote#} with random/selected emote
-            var message = Settings.ResubMessage;
+            var subscriptions = JsonConvert.DeserializeObject<Dictionary<string, SubscriberEmotes>>(Utility.Get("https://twitchemotes.com/api_cache/v3/subscriber.json"));
 
-            var tier = "Twitch Prime";
-            if (!e.ReSubscriber.IsTwitchPrime)
+            if (subscriptions.TryGetValue(e.Channel, out var subEmotes))
             {
-                switch (e.ReSubscriber.SubscriptionPlan)
-                {
-                    case SubscriptionPlan.Tier1:
-                        tier = "$4.99";
-                        break;
-                    case SubscriptionPlan.Tier2:
-                        tier = "$14.99";
-                        break;
-                    case SubscriptionPlan.Tier3:
-                        tier = "$24.99";
-                        break;
-                }
+                this.emotes.AddRange(subEmotes.Emotes);
             }
 
-            message = message.Replace("{resubscriber}", e.ReSubscriber.DisplayName)
-                .Replace("{tier}", tier)
-                .Replace("{length}", $"{e.ReSubscriber.Months} {(e.ReSubscriber.Months == 1 ? "Month" : "Months")}");
+            // please for the love of god GC clean this bit of memory.
+            subscriptions = null;
+        }
 
-            // !TODO: Use regex to find the {emote#} pattern and replace with selected emotes.
-            this.ChatClient.SendMessage(e.ReSubscriber.Channel, message);
+        private void Client_OnReSubscriber(object sender, OnReSubscriberArgs e)
+        {
+            if (Settings.UseResubMessage)
+            {
+                // replace {resubscriber} with subscriber displayname
+                // replace {tier} with Twitch Prime, $4.99, $14.99 $24.99
+                // replace {length} with months
+                // replace {emote#} with random/selected emote
+                var message = Settings.ResubMessage;
+
+                var tier = "Twitch Prime";
+                if (!e.ReSubscriber.IsTwitchPrime)
+                {
+                    switch (e.ReSubscriber.SubscriptionPlan)
+                    {
+                        case SubscriptionPlan.Tier1:
+                            tier = "$4.99";
+                            break;
+                        case SubscriptionPlan.Tier2:
+                            tier = "$14.99";
+                            break;
+                        case SubscriptionPlan.Tier3:
+                            tier = "$24.99";
+                            break;
+                    }
+                }
+
+                message = message.Replace("{resubscriber}", e.ReSubscriber.DisplayName)
+                    .Replace("{tier}", tier)
+                    .Replace("{length}", $"{e.ReSubscriber.Months} {(e.ReSubscriber.Months == 1 ? "Month" : "Months")}");
+
+                message = this.ReplaceEmotes(message);
+
+                this.ChatClient.SendMessage(e.ReSubscriber.Channel, message);
+            }
         }
 
         private void Client_OnNewSubscriber(object sender, OnNewSubscriberArgs e)
         {
-            // replace {subscriber} with subscriber displayname
-            // replace {tier} with Twitch Prime, $4.99, $14.99 $24.99
-            // replace {emote#} with random/selected emote
-            var message = Settings.SubMessage;
-
-            var tier = "Twitch Prime";
-            if (!e.Subscriber.IsTwitchPrime)
+            if (Settings.UseSubMessage)
             {
-                switch (e.Subscriber.SubscriptionPlan)
+                // replace {subscriber} with subscriber displayname
+                // replace {tier} with Twitch Prime, $4.99, $14.99 $24.99
+                // replace {emote#} with random/selected emote
+                var message = Settings.SubMessage;
+
+                var tier = "Twitch Prime";
+                if (!e.Subscriber.IsTwitchPrime)
                 {
-                    case SubscriptionPlan.Tier1:
-                        tier = "$4.99";
-                        break;
-                    case SubscriptionPlan.Tier2:
-                        tier = "$14.99";
-                        break;
-                    case SubscriptionPlan.Tier3:
-                        tier = "$24.99";
-                        break;
+                    switch (e.Subscriber.SubscriptionPlan)
+                    {
+                        case SubscriptionPlan.Tier1:
+                            tier = "$4.99";
+                            break;
+                        case SubscriptionPlan.Tier2:
+                            tier = "$14.99";
+                            break;
+                        case SubscriptionPlan.Tier3:
+                            tier = "$24.99";
+                            break;
+                    }
                 }
+
+                // replace each variable with the appropriate values.
+                // {emote} specifically will always get a random emote.
+                message = message.Replace("{subscriber}", e.Subscriber.DisplayName)
+                    .Replace("{tier}", tier);
+
+                message = this.ReplaceEmotes(message);
+
+                this.ChatClient.SendMessage(e.Subscriber.Channel, message);
             }
-
-            message = message.Replace("{subscriber}", e.Subscriber.DisplayName)
-                .Replace("{tier}", tier);
-
-            // !TODO: Use regex to find the {emote#} pattern and replace with selected emotes.
-            this.ChatClient.SendMessage(e.Subscriber.Channel, message);
         }
 
         private void Client_OnGiftedSubscription(object sender, OnGiftedSubscriptionArgs e)
         {
-            // TODO: Implement gifted subscription messages. Currently the GiftedSubscription type does not contain the information we need.
+            if (Settings.UseGiftedSubMessage)
+            {
+                // TODO: Implement gifted subscription messages. Currently the GiftedSubscription type does not contain the information we need.
+            }
         }
 
         private void Client_OnChatCommandReceived(object sender, OnChatCommandReceivedArgs e)
@@ -638,7 +752,7 @@
 
                 // we can ignore the command delay if the user is a mod or the broadcaster, we're only worried about
                 // spam from regular viewers and maybe subscribers.
-                var ignoreDelay = e.Command.ChatMessage.IsModerator || e.Command.ChatMessage.IsBroadcaster;
+                var ignoreDelay = e.Command.ChatMessage.IsModerator || e.Command.ChatMessage.IsBroadcaster || !Settings.UseCommandDelay;
 
                 if (ignoreDelay || !this.CommandTimedout(e.Command.CommandText))
                 {
@@ -648,7 +762,7 @@
                     }
                     else if (command is MChatCommand chatCommand)
                     {
-                        this.Client.SendMessage(e.Command.ChatMessage.Channel, chatCommand.Message);
+                        this.ChatClient.SendMessage(e.Command.ChatMessage.Channel, chatCommand.Message);
                     }
 
                     if (!ignoreDelay)
@@ -676,7 +790,7 @@
 
         private void TrayIcon_Canvas(object sender, EventArgs e)
         {
-            // TODO: Implement Canvas menu
+            this.Canvas.Show();
         }
     }
 }
