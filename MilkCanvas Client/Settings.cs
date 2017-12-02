@@ -23,10 +23,19 @@
         private const string twitchSubjectKey = "TwitchSubject";
         private const string twitchAccessTokenKey = "TwitchAccessToken";
 
+        private const string useAlternateAccountKey = "UseAlternateAccount";
+        private const string altTwitchSubjectKey = "AltTwitchSubject";
+        private const string altTwitchAccessTokenKey = "AltTwitchAccessToken";
+        private const string useSubMessageKey = "UseSubMessage";
         private const string subMessageKey = "SubMessage";
+        private const string useResubMessageKey = "UseResubMessage";
         private const string resubMessageKey = "ResubMessage";
+        private const string useGiftedSubMessageKey = "UseGiftedSubMessage";
         private const string giftedSubMessageKey = "GiftedSubMessage";
+        private const string useCommandDelayKey = "UseCommandDelay";
         private const string commandDelayKey = "CommandDelay";
+        private const string reconnectCanvasKey = "ReconnectCanvas";
+        private const string reconnectDelayKey = "ReconnectDelay";
 
         private const string exemptModsFromDelayKey = "ExemptModsFromDelay";
         private const string modsSetChatCommandsKey = "ModsSetChatCommands";
@@ -54,29 +63,299 @@
 
         public static bool FirstLaunch => GetSetting(launchedKey) == null;
 
-        public static string State => GetSetting(stateKey)?.Value;
+        public static string State
+        {
+            get
+            {
+                var setting = GetSetting(stateKey);
+                if (setting != null)
+                {
+                    return setting.Value;
+                }
 
-        public static string TwitchSubject => GetSetting(twitchSubjectKey)?.Value;
+                return null;
+            }
+        }
 
-        public static string TwitchAccessToken => GetSetting(twitchAccessTokenKey)?.Value;
+        public static string TwitchSubject
+        {
+            get
+            {
+                var setting = GetSetting(twitchSubjectKey);
+                if (setting != null)
+                {
+                    return setting.Value;
+                }
 
-        public static string SubMessage => GetSetting(subMessageKey)?.Value;
+                return null;
+            }
+        }
 
-        public static string ResubMessage => GetSetting(resubMessageKey)?.Value;
+        public static string TwitchAccessToken
+        {
+            get
+            {
+                var setting = GetSetting(twitchAccessTokenKey);
+                if (setting != null)
+                {
+                    return setting.Value;
+                }
 
-        public static string GiftedSubMessage => GetSetting(giftedSubMessageKey)?.Value;
+                return null;
+            }
+        }
 
-        public static float CommandDelay => float.Parse(GetSetting(commandDelayKey)?.Value ?? "0");
+        public static bool UseAlternateAccount
+        {
+            get
+            {
+                var setting = GetSetting(useAlternateAccountKey);
+                if (setting != null)
+                {
+                    return bool.TrueString.Equals(setting.Value);
+                }
 
-        public static bool ExemptModsFromDelay => bool.TrueString.Equals(GetSetting(exemptModsFromDelayKey)?.Value);
+                return false;
+            }
+        }
 
-        public static bool ModsSetChatCommands => bool.TrueString.Equals(GetSetting(modsSetChatCommandsKey)?.Value);
+        public static string AltTwitchSubject
+        {
+            get
+            {
+                var setting = GetSetting(altTwitchSubjectKey);
+                if (setting != null)
+                {
+                    return setting.Value;
+                }
 
-        public static bool ModsRemoveChatCommands => bool.TrueString.Equals(GetSetting(modsRemoveChatCommandsKey)?.Value);
+                return null;
+            }
+        }
 
-        public static bool ModsSetAliases => bool.TrueString.Equals(GetSetting(modsSetAliasesKey)?.Value);
+        public static string AltTwitchAccessToken
+        {
+            get
+            {
+                var setting = GetSetting(altTwitchAccessTokenKey);
+                if (setting != null)
+                {
+                    return setting.Value;
+                }
 
-        public static bool ModsRemoveAliases => bool.TrueString.Equals(GetSetting(modsRemoveAliasesKey)?.Value);
+                return null;
+            }
+        }
+
+        public static bool UseSubMessage
+        {
+            get
+            {
+                var setting = GetSetting(useSubMessageKey);
+                if (setting != null)
+                {
+                    return bool.TrueString.Equals(setting.Value);
+                }
+
+                return false;
+            }
+        }
+
+        public static string SubMessage
+        {
+            get
+            {
+                var setting = GetSetting(subMessageKey);
+                if (setting != null)
+                {
+                    return setting.Value;
+                }
+
+                return null;
+            }
+        }
+
+        public static bool UseResubMessage
+        {
+            get
+            {
+                var setting = GetSetting(useResubMessageKey);
+                if (setting != null)
+                {
+                    return bool.TrueString.Equals(setting.Value);
+                }
+
+                return false;
+            }
+        }
+
+        public static string ResubMessage
+        {
+            get
+            {
+                var setting = GetSetting(resubMessageKey);
+                if (setting != null)
+                {
+                    return setting.Value;
+                }
+
+                return null;
+            }
+        }
+
+        public static bool UseGiftedSubMessage
+        {
+            get
+            {
+                var setting = GetSetting(useGiftedSubMessageKey);
+                if (setting != null)
+                {
+                    return bool.TrueString.Equals(setting.Value);
+                }
+
+                return false;
+            }
+        }
+
+        public static string GiftedSubMessage
+        {
+            get
+            {
+                var setting = GetSetting(giftedSubMessageKey);
+                if (setting != null)
+                {
+                    return setting.Value;
+                }
+
+                return null;
+            }
+        }
+
+        public static bool UseCommandDelay
+        {
+            get
+            {
+                var setting = GetSetting(useCommandDelayKey);
+                if (setting != null)
+                {
+                    return bool.TrueString.Equals(setting.Value);
+                }
+
+                return false;
+            }
+        }
+
+        public static int CommandDelay
+        {
+            get
+            {
+                var setting = GetSetting(commandDelayKey);
+                if (setting != null && int.TryParse(setting.Value, out var value))
+                {
+                    return value;
+                }
+
+                return 0;
+            }
+        }
+
+        public static bool ReconnectCanvas
+        {
+            get
+            {
+                var setting = GetSetting(reconnectCanvasKey);
+                if (setting != null)
+                {
+                    return bool.TrueString.Equals(setting.Value);
+                }
+
+                return false;
+            }
+        }
+
+        public static int ReconnectDelay
+        {
+            get
+            {
+                var setting = GetSetting(reconnectDelayKey);
+                if (setting != null && int.TryParse(setting.Value, out var value))
+                {
+                    return value;
+                }
+
+                return 0;
+            }
+        }
+
+        public static bool ExemptModsFromDelay
+        {
+            get
+            {
+                var setting = GetSetting(exemptModsFromDelayKey);
+                if (setting != null)
+                {
+                    return bool.TrueString.Equals(setting.Value);
+                }
+
+                return false;
+            }
+        }
+
+        public static bool ModsSetChatCommands
+        {
+            get
+            {
+                var setting = GetSetting(modsSetChatCommandsKey);
+                if (setting != null)
+                {
+                    return bool.TrueString.Equals(setting.Value);
+                }
+
+                return false;
+            }
+        }
+
+        public static bool ModsRemoveChatCommands
+        {
+            get
+            {
+                var setting = GetSetting(modsRemoveChatCommandsKey);
+                if (setting != null)
+                {
+                    return bool.TrueString.Equals(setting.Value);
+                }
+
+                return false;
+            }
+        }
+
+        public static bool ModsSetAliases
+        {
+            get
+            {
+                var setting = GetSetting(modsSetAliasesKey);
+                if (setting != null)
+                {
+                    return bool.TrueString.Equals(setting.Value);
+                }
+
+                return false;
+            }
+        }
+
+        public static bool ModsRemoveAliases
+        {
+            get
+            {
+                var setting = GetSetting(modsRemoveAliasesKey);
+                if (setting != null)
+                {
+                    return bool.TrueString.Equals(setting.Value);
+                }
+
+                return false;
+            }
+        }
 
         public static KeyValueConfigurationElement GetSetting(string key) => config.AppSettings.Settings[key];
 
@@ -85,17 +364,28 @@
             string state = null,
             string twitchSubject = null,
             string twitchAccessToken = null,
+            bool? useAltAccount = null,
+            string altTwitchSubject = null,
+            string altTwitchAccessToken = null,
+            bool? useSubMessage = null,
             string subMessage = null,
+            bool? useResubMessage = null,
             string resubMessage = null,
+            bool? useGiftedSubMessage = null,
             string giftedSubMessage = null,
-            float? commandDelay = null,
+            bool? useCommandDelay = null,
+            int? commandDelay = null,
+            bool? reconnectCanvas = null,
+            int? reconnectDelay = null,
             bool? exemptModsFromDelay = null,
             bool? modsSetChatCommands = null,
             bool? modsRemoveChatCommands = null,
             bool? modsSetAliases = null,
             bool? modsRemoveAliases = null)
         {
-            if (firstLaunch.HasValue)
+
+            // launch options
+            if (firstLaunch != null)
             {
                 UpdateSetting(launchedKey, firstLaunch.Value.ToString());
             }
@@ -115,9 +405,70 @@
                 UpdateSetting(twitchAccessTokenKey, twitchAccessToken);
             }
 
+            // general options
+            if (useAltAccount != null)
+            {
+                UpdateSetting(useAlternateAccountKey, useAltAccount.Value.ToString());
+            }
+
+            if (altTwitchSubject != null)
+            {
+                UpdateSetting(altTwitchSubjectKey, altTwitchSubject);
+            }
+
+            if (altTwitchAccessToken != null)
+            {
+                UpdateSetting(altTwitchAccessTokenKey, altTwitchAccessToken);
+            }
+
+            if (useSubMessage != null)
+            {
+                UpdateSetting(useSubMessageKey, useSubMessage.Value.ToString());
+            }
+
+            if (subMessage != null)
+            {
+                UpdateSetting(subMessageKey, subMessage);
+            }
+
+            if (useResubMessage != null)
+            {
+                UpdateSetting(useResubMessageKey, useResubMessage.Value.ToString());
+            }
+
+            if (resubMessage != null)
+            {
+                UpdateSetting(resubMessageKey, resubMessage);
+            }
+
+            if (useGiftedSubMessage != null)
+            {
+                UpdateSetting(useGiftedSubMessageKey, useGiftedSubMessage.Value.ToString());
+            }
+
+            if (giftedSubMessage != null)
+            {
+                UpdateSetting(giftedSubMessageKey, giftedSubMessage);
+            }
+
+            if (useCommandDelay != null)
+            {
+                UpdateSetting(useCommandDelayKey, useCommandDelay.Value.ToString());
+            }
+
             if (commandDelay != null)
             {
                 UpdateSetting(commandDelayKey, commandDelay.Value.ToString());
+            }
+
+            if (reconnectCanvas != null)
+            {
+                UpdateSetting(reconnectCanvasKey, reconnectCanvas.Value.ToString());
+            }
+
+            if (reconnectDelay != null)
+            {
+                UpdateSetting(reconnectDelayKey, reconnectDelay.Value.ToString());
             }
 
             config.Save();
@@ -136,6 +487,14 @@
         public static void SaveAliases(List<Alias> aliases)
         {
             SaveFileText(aliasesPath, JsonConvert.SerializeObject(aliases));
+        }
+
+        public static void UpdateIf(bool assertion, string key, string value)
+        {
+            if (assertion)
+            {
+                UpdateSetting(key, value);
+            }
         }
 
         public static void UpdateSetting(string key, string value)
