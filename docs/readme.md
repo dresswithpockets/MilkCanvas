@@ -3,7 +3,6 @@
 ## Welcome
 
 ### Preface
----
 
 Thank you for using MilkCanvas for your interactive tiwtch bot needs <3
 
@@ -18,7 +17,6 @@ You can [email me](mailto:tristen@tristenhorton.com) or add me on [steam](http:/
 ## Getting Started
 
 ### Using MilkCanvas
----
 
 MilkCanvas exists in your Notification Tray.
 
@@ -27,7 +25,6 @@ Double clicking the icon will open [Canvas](#canvas).
 Alternatively, right clicking the icon will show a menu of additional options to choose from.
 
 ### Setting Up Chat Bot
----
 
 If you've already logged into MilkCanvas using your streaming account, you're already half way finished.
 
@@ -36,7 +33,6 @@ By default, chat commands and messages relayed via MilkCanvas will be sent throu
 If you don't want this behaviour and have a secondary account specifically for chat bot, check out [Authorizing a Chatbot](#alternate-account-for-chatbot)
 
 ### Built-In Commands
----
 
 There are a few builtin commands in the current version of MilkCanvas. Click each one for details on the commands and how to use them.
 
@@ -64,21 +60,18 @@ Adjacent to the checkbox is a Twitch Connect button. Click this button to be tak
 Here are all of the immediately available built-in command in the latest version of MilkCanvas. 
 
 ### Uptime
----
 
 ```
 !uptime - Prints the current uptime of the stream, if the stream is live.
 ```
 
 ### Commands
----
 
 ```
 !commands - Prints a list of all of the available commands.
 ```
 
 ### Command
----
 
 ```
 !command - Creates, deletes, or updates chat commands.
@@ -92,7 +85,6 @@ Examples:
 ```
 
 ### Alias
----
 
 ```
 !alias - Creates or removes aliases for existing commands.
@@ -109,7 +101,6 @@ To remove the alias:
 ```
 
 ### Permission
----
 
 ```
 !permission - Changes the permissions required to run a command.
@@ -130,7 +121,6 @@ Everyone:
 ```
 
 ### Bookmark
----
 
 ```
 !bookmark - Flags the current timestamp in the stream and saves it.
