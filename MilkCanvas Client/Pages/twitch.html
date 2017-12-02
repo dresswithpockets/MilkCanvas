@@ -8,7 +8,16 @@
         var uri = '/twitch/authenticate/?' + window.location.hash.substring(1);
 
         $(document).ready(function () {
-            $.get(uri);
+            $.ajax({
+                type: "GET",
+                url: uri,
+                data: '{}',
+                contentType: "text/plain; charset=utf-8",
+                dataType: "text",
+                success: function (res) {
+                    window.location = "https://phxvyper.github.io/MilkCanvas";
+                }
+            });
         });
 
     </script>
