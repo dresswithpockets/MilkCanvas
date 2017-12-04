@@ -95,6 +95,8 @@
             this.Client.OnReSubscriber += this.Client_OnReSubscriber;
             this.Client.OnChatCommandReceived += this.Client_OnChatCommandReceived;
             this.Client.OnGiftedSubscription += this.Client_OnGiftedSubscription;
+            this.Client.OnConnectionError += this.Client_OnConnectionError;
+            this.Client.OnConnected += this.Client_OnConnected;
 
             this.Client.Connect();
 
@@ -378,6 +380,22 @@
             this.builtinCommands.Add(new Command("bookmark", "Flags the current timestamp in the stream and saves it.", this.Bookmark_ChatCommand));
         }
 
+        private void SendTaggableMessage(string message, OnChatCommandReceivedArgs args)
+        {
+            var commandArgs = args.Command.ArgumentsAsList;
+            var mention = commandArgs.Count > 0 ? commandArgs[commandArgs.Count - 1] : string.Empty;
+            if ((args.Command.ChatMessage.IsModerator || args.Command.ChatMessage.IsBroadcaster) && Settings.ModsCanPseudoTag && mention.StartsWith("@"))
+            {
+                message = $"{mention} {message}";
+            }
+            else if (Settings.TagUsers)
+            {
+                message = $"@{args.Command.ChatMessage.DisplayName} {message}";
+            }
+
+            this.ChatClient.SendMessage(args.Command.ChatMessage.Channel, message);
+        }
+
         private string ReplaceEmotes(string message)
         {
             var rand = new Random();
@@ -432,7 +450,7 @@
                 response = "Stream is offline!";
             }
 
-            this.ChatClient.SendMessage($"@{e.Command.ChatMessage.DisplayName} {response}");
+            this.SendTaggableMessage(response, e);
         }
 
         private void Commands_ChatCommand(object sender, OnChatCommandReceivedArgs e)
@@ -605,12 +623,6 @@
 
         private void Login_TwitchAuthenticated(object sender, TwitchAuthenticatedEventArgs e)
         {
-            if (Settings.FirstLaunch)
-            {
-                // this.GettingStarted.Show();
-                //Process.Start("https://phxvyper.github.io/MilkCanvas");
-            }
-
             this.TwitchSetup(Properties.Resources.TwitchClient, e.Hash.AccessToken, e.Hash.Fragment.Subject, e.Hash.State, true);
         }
 
@@ -762,7 +774,7 @@
                     }
                     else if (command is MChatCommand chatCommand)
                     {
-                        this.ChatClient.SendMessage(e.Command.ChatMessage.Channel, chatCommand.Message);
+                        this.SendTaggableMessage(chatCommand.Message, e);
                     }
 
                     if (!ignoreDelay)
@@ -771,6 +783,33 @@
                     }
                 }
             }
+        }
+
+        private void Client_OnConnectionError(object sender, OnConnectionErrorArgs args)
+        {
+            if (Settings.ReconnectCanvas)
+            {
+                this.TrayIcon.Text = "Connection Error... Reconnecting";
+
+                var delay = Settings.ReconnectDelay;
+                if (delay < 0)
+                {
+                    delay *= -1;
+                }
+
+                var t = new STimer(delay * 1000);
+                t.Elapsed += (s, e) =>
+                {
+                    this.TwitchSetup(Properties.Resources.TwitchClient, Settings.TwitchAccessToken, Settings.TwitchSubject, Settings.State, save: false);
+                    t.Stop();
+                };
+                t.Start();
+            }
+        }
+
+        private void Client_OnConnected(object sender, OnConnectedArgs e)
+        {
+            this.TrayIcon.Text = "Connected.";
         }
 
         private void TrayIcon_Exit(object sender, EventArgs e)

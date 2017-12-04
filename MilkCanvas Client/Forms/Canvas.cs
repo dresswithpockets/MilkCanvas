@@ -75,6 +75,34 @@
 
             this.InitializeComponent();
 
+            this.SetupGeneralSettings();
+            this.SetupTagginSettings();
+        }
+
+        /// <summary>
+        /// Gets the social platform that the user is attempting to authenticate with.
+        /// Null if the user hasn't selected a platform.
+        /// </summary>
+        public SocialPlatform? AwaitingPlatform { get; private set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether or not the authentication has been completed.
+        /// </summary>
+        private bool FinishedAuthenticator { get; set; }
+
+        private string State { get; }
+
+        private string Nonce { get; }
+
+        private string TwitchAuthenticationUrl { get; }
+
+        protected override void ActionBar_OnCloseRequested(object sender, EventArgs e)
+        {
+            this.Hide();
+        }
+
+        private void SetupGeneralSettings()
+        {
             this.chatBotCheckbox.Checked = Settings.UseAlternateAccount;
             this.subMessageCheckbox.Checked = Settings.UseSubMessage;
             this.resubMessageCheckbox.Checked = Settings.UseResubMessage;
@@ -102,26 +130,10 @@
             }
         }
 
-        /// <summary>
-        /// Gets the social platform that the user is attempting to authenticate with.
-        /// Null if the user hasn't selected a platform.
-        /// </summary>
-        public SocialPlatform? AwaitingPlatform { get; private set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether or not the authentication has been completed.
-        /// </summary>
-        private bool FinishedAuthenticator { get; set; }
-
-        private string State { get; }
-
-        private string Nonce { get; }
-
-        private string TwitchAuthenticationUrl { get; }
-
-        protected override void ActionBar_OnCloseRequested(object sender, EventArgs e)
+        private void SetupTagginSettings()
         {
-            this.Hide();
+            this.tagUsersCheckbox.Checked = Settings.TagUsers;
+            this.modsPseudoTagUsersCheckbox.Checked = Settings.ModsCanPseudoTag;
         }
 
         private void SubmitTwitchVerification(TwitchHashFile hash)
@@ -211,6 +223,26 @@
         private void ReconnectNumeric_ValueChanged(object sender, EventArgs e)
         {
             Settings.Save(reconnectDelay: Convert.ToInt32(this.reconnectNumeric.Value));
+        }
+
+        private void HelpLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://phxvyper.github.io/MilkCanvas");
+        }
+
+        private void ModsPseudoTagHelpLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://phxvyper.github.io/MilkCanvas#Moderators-Can-Pseudo-Tag-Users");
+        }
+
+        private void TagUsersCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Save(tagUsers: this.tagUsersCheckbox.Checked);
+        }
+
+        private void ModsPseudoTagUsersCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Save(modsCanPseudoTag: this.modsPseudoTagUsersCheckbox.Checked);
         }
     }
 }

@@ -30,6 +30,7 @@
         {
             this.canvasTabs = new System.Windows.Forms.TabControl();
             this.generalSettingsTab = new System.Windows.Forms.TabPage();
+            this.helpLinkLabel = new System.Windows.Forms.LinkLabel();
             this.altAccountNameLabel = new System.Windows.Forms.Label();
             this.reconnectLabel2 = new System.Windows.Forms.Label();
             this.reconnectNumeric = new System.Windows.Forms.NumericUpDown();
@@ -48,15 +49,23 @@
             this.altAccountLabel = new System.Windows.Forms.Label();
             this.altAccountLogin = new MilkCanvas.Controls.SocialButton();
             this.chatBotCheckbox = new System.Windows.Forms.CheckBox();
-            this.permissionsSettingsTab = new System.Windows.Forms.TabPage();
             this.taggingSettingsTab = new System.Windows.Forms.TabPage();
+            this.modsPseudoTagHelpLabel = new System.Windows.Forms.LinkLabel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.modsPseudoTagUsersCheckbox = new System.Windows.Forms.CheckBox();
+            this.tagUsersCheckbox = new System.Windows.Forms.CheckBox();
+            this.permissionsSettingsTab = new System.Windows.Forms.TabPage();
             this.pointsSettingsTab = new System.Windows.Forms.TabPage();
             this.loggingSettingsTab = new System.Windows.Forms.TabPage();
             this.notificationsSettingsTab = new System.Windows.Forms.TabPage();
+            this.pollsSettingsTab = new System.Windows.Forms.TabPage();
+            this.campaignsSettingsTab = new System.Windows.Forms.TabPage();
+            this.bookmarksSettingsTab = new System.Windows.Forms.TabPage();
             this.canvasTabs.SuspendLayout();
             this.generalSettingsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.reconnectNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.timeoutNumeric)).BeginInit();
+            this.taggingSettingsTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // canvasTabs
@@ -67,6 +76,9 @@
             this.canvasTabs.Controls.Add(this.pointsSettingsTab);
             this.canvasTabs.Controls.Add(this.loggingSettingsTab);
             this.canvasTabs.Controls.Add(this.notificationsSettingsTab);
+            this.canvasTabs.Controls.Add(this.pollsSettingsTab);
+            this.canvasTabs.Controls.Add(this.campaignsSettingsTab);
+            this.canvasTabs.Controls.Add(this.bookmarksSettingsTab);
             this.canvasTabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.canvasTabs.HotTrack = true;
             this.canvasTabs.Location = new System.Drawing.Point(0, 20);
@@ -80,6 +92,7 @@
             // generalSettingsTab
             // 
             this.generalSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.generalSettingsTab.Controls.Add(this.helpLinkLabel);
             this.generalSettingsTab.Controls.Add(this.altAccountNameLabel);
             this.generalSettingsTab.Controls.Add(this.reconnectLabel2);
             this.generalSettingsTab.Controls.Add(this.reconnectNumeric);
@@ -104,6 +117,20 @@
             this.generalSettingsTab.Size = new System.Drawing.Size(413, 315);
             this.generalSettingsTab.TabIndex = 0;
             this.generalSettingsTab.Text = "General";
+            // 
+            // helpLinkLabel
+            // 
+            this.helpLinkLabel.ActiveLinkColor = System.Drawing.Color.Red;
+            this.helpLinkLabel.AutoSize = true;
+            this.helpLinkLabel.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
+            this.helpLinkLabel.Location = new System.Drawing.Point(310, 292);
+            this.helpLinkLabel.Name = "helpLinkLabel";
+            this.helpLinkLabel.Size = new System.Drawing.Size(97, 13);
+            this.helpLinkLabel.TabIndex = 18;
+            this.helpLinkLabel.TabStop = true;
+            this.helpLinkLabel.Text = "Getting Started";
+            this.helpLinkLabel.VisitedLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(115)))), ((int)(((byte)(150)))));
+            this.helpLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.HelpLinkLabel_LinkClicked);
             // 
             // altAccountNameLabel
             // 
@@ -292,39 +319,90 @@
             this.chatBotCheckbox.UseVisualStyleBackColor = true;
             this.chatBotCheckbox.CheckedChanged += new System.EventHandler(this.ChatBotCheckbox_CheckedChanged);
             // 
-            // permissionsSettingsTab
-            // 
-            this.permissionsSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.permissionsSettingsTab.Location = new System.Drawing.Point(4, 22);
-            this.permissionsSettingsTab.Name = "permissionsSettingsTab";
-            this.permissionsSettingsTab.Size = new System.Drawing.Size(413, 333);
-            this.permissionsSettingsTab.TabIndex = 1;
-            this.permissionsSettingsTab.Text = "Permissions";
-            // 
             // taggingSettingsTab
             // 
             this.taggingSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.taggingSettingsTab.Location = new System.Drawing.Point(4, 22);
+            this.taggingSettingsTab.Controls.Add(this.modsPseudoTagHelpLabel);
+            this.taggingSettingsTab.Controls.Add(this.label1);
+            this.taggingSettingsTab.Controls.Add(this.modsPseudoTagUsersCheckbox);
+            this.taggingSettingsTab.Controls.Add(this.tagUsersCheckbox);
+            this.taggingSettingsTab.Location = new System.Drawing.Point(4, 40);
             this.taggingSettingsTab.Name = "taggingSettingsTab";
-            this.taggingSettingsTab.Size = new System.Drawing.Size(413, 333);
+            this.taggingSettingsTab.Size = new System.Drawing.Size(413, 315);
             this.taggingSettingsTab.TabIndex = 2;
             this.taggingSettingsTab.Text = "Tagging/Mentions";
+            // 
+            // modsPseudoTagHelpLabel
+            // 
+            this.modsPseudoTagHelpLabel.ActiveLinkColor = System.Drawing.Color.Red;
+            this.modsPseudoTagHelpLabel.AutoSize = true;
+            this.modsPseudoTagHelpLabel.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(255)))));
+            this.modsPseudoTagHelpLabel.Location = new System.Drawing.Point(224, 30);
+            this.modsPseudoTagHelpLabel.Name = "modsPseudoTagHelpLabel";
+            this.modsPseudoTagHelpLabel.Size = new System.Drawing.Size(73, 13);
+            this.modsPseudoTagHelpLabel.TabIndex = 19;
+            this.modsPseudoTagHelpLabel.TabStop = true;
+            this.modsPseudoTagHelpLabel.Text = "Whats this?";
+            this.modsPseudoTagHelpLabel.VisitedLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(115)))), ((int)(((byte)(150)))));
+            this.modsPseudoTagHelpLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ModsPseudoTagHelpLabel_LinkClicked);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(36, 245);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(343, 65);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Have suggestions for adding more depth to these options?\r\n\r\nYou can email me at t" +
+    "risten@tristenhorton.com\r\n\r\nOr add me on steam at steamcommunity.com/id/TristenM" +
+    "ilk";
+            // 
+            // modsPseudoTagUsersCheckbox
+            // 
+            this.modsPseudoTagUsersCheckbox.AutoSize = true;
+            this.modsPseudoTagUsersCheckbox.Location = new System.Drawing.Point(6, 29);
+            this.modsPseudoTagUsersCheckbox.Name = "modsPseudoTagUsersCheckbox";
+            this.modsPseudoTagUsersCheckbox.Size = new System.Drawing.Size(212, 17);
+            this.modsPseudoTagUsersCheckbox.TabIndex = 2;
+            this.modsPseudoTagUsersCheckbox.Text = "Moderators can pseudo tag users";
+            this.modsPseudoTagUsersCheckbox.UseVisualStyleBackColor = true;
+            this.modsPseudoTagUsersCheckbox.CheckedChanged += new System.EventHandler(this.ModsPseudoTagUsersCheckbox_CheckedChanged);
+            // 
+            // tagUsersCheckbox
+            // 
+            this.tagUsersCheckbox.AutoSize = true;
+            this.tagUsersCheckbox.Location = new System.Drawing.Point(6, 6);
+            this.tagUsersCheckbox.Name = "tagUsersCheckbox";
+            this.tagUsersCheckbox.Size = new System.Drawing.Size(188, 17);
+            this.tagUsersCheckbox.TabIndex = 1;
+            this.tagUsersCheckbox.Text = "Tag users who call commands";
+            this.tagUsersCheckbox.UseVisualStyleBackColor = true;
+            this.tagUsersCheckbox.CheckedChanged += new System.EventHandler(this.TagUsersCheckbox_CheckedChanged);
+            // 
+            // permissionsSettingsTab
+            // 
+            this.permissionsSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.permissionsSettingsTab.Location = new System.Drawing.Point(4, 40);
+            this.permissionsSettingsTab.Name = "permissionsSettingsTab";
+            this.permissionsSettingsTab.Size = new System.Drawing.Size(413, 315);
+            this.permissionsSettingsTab.TabIndex = 1;
+            this.permissionsSettingsTab.Text = "Permissions";
             // 
             // pointsSettingsTab
             // 
             this.pointsSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.pointsSettingsTab.Location = new System.Drawing.Point(4, 22);
+            this.pointsSettingsTab.Location = new System.Drawing.Point(4, 40);
             this.pointsSettingsTab.Name = "pointsSettingsTab";
-            this.pointsSettingsTab.Size = new System.Drawing.Size(413, 333);
+            this.pointsSettingsTab.Size = new System.Drawing.Size(413, 315);
             this.pointsSettingsTab.TabIndex = 3;
             this.pointsSettingsTab.Text = "Points";
             // 
             // loggingSettingsTab
             // 
             this.loggingSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.loggingSettingsTab.Location = new System.Drawing.Point(4, 22);
+            this.loggingSettingsTab.Location = new System.Drawing.Point(4, 40);
             this.loggingSettingsTab.Name = "loggingSettingsTab";
-            this.loggingSettingsTab.Size = new System.Drawing.Size(413, 333);
+            this.loggingSettingsTab.Size = new System.Drawing.Size(413, 315);
             this.loggingSettingsTab.TabIndex = 4;
             this.loggingSettingsTab.Text = "Logging";
             // 
@@ -336,6 +414,33 @@
             this.notificationsSettingsTab.Size = new System.Drawing.Size(413, 315);
             this.notificationsSettingsTab.TabIndex = 5;
             this.notificationsSettingsTab.Text = "Notifications";
+            // 
+            // pollsSettingsTab
+            // 
+            this.pollsSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.pollsSettingsTab.Location = new System.Drawing.Point(4, 40);
+            this.pollsSettingsTab.Name = "pollsSettingsTab";
+            this.pollsSettingsTab.Size = new System.Drawing.Size(413, 315);
+            this.pollsSettingsTab.TabIndex = 6;
+            this.pollsSettingsTab.Text = "Polls";
+            // 
+            // campaignsSettingsTab
+            // 
+            this.campaignsSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.campaignsSettingsTab.Location = new System.Drawing.Point(4, 40);
+            this.campaignsSettingsTab.Name = "campaignsSettingsTab";
+            this.campaignsSettingsTab.Size = new System.Drawing.Size(413, 315);
+            this.campaignsSettingsTab.TabIndex = 7;
+            this.campaignsSettingsTab.Text = "Campaigns";
+            // 
+            // bookmarksSettingsTab
+            // 
+            this.bookmarksSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.bookmarksSettingsTab.Location = new System.Drawing.Point(4, 40);
+            this.bookmarksSettingsTab.Name = "bookmarksSettingsTab";
+            this.bookmarksSettingsTab.Size = new System.Drawing.Size(413, 315);
+            this.bookmarksSettingsTab.TabIndex = 8;
+            this.bookmarksSettingsTab.Text = "Bookmarks";
             // 
             // Canvas
             // 
@@ -354,6 +459,8 @@
             this.generalSettingsTab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.reconnectNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.timeoutNumeric)).EndInit();
+            this.taggingSettingsTab.ResumeLayout(false);
+            this.taggingSettingsTab.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -385,5 +492,13 @@
         private System.Windows.Forms.TabPage pointsSettingsTab;
         private System.Windows.Forms.TabPage loggingSettingsTab;
         private System.Windows.Forms.TabPage notificationsSettingsTab;
+        private System.Windows.Forms.LinkLabel helpLinkLabel;
+        private System.Windows.Forms.CheckBox tagUsersCheckbox;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox modsPseudoTagUsersCheckbox;
+        private System.Windows.Forms.LinkLabel modsPseudoTagHelpLabel;
+        private System.Windows.Forms.TabPage pollsSettingsTab;
+        private System.Windows.Forms.TabPage campaignsSettingsTab;
+        private System.Windows.Forms.TabPage bookmarksSettingsTab;
     }
 }
