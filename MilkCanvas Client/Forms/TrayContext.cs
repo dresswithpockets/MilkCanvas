@@ -632,9 +632,35 @@
             }
         }
 
-        private void Bookmark_ChatCommand(object sender, OnChatCommandReceivedArgs e)
+        private async void Bookmark_ChatCommand(object sender, OnChatCommandReceivedArgs e)
         {
-            // TODO: Implement stream bookmarking.
+            // TODO: Implement hotkey for saving bookmarks.
+
+            var id = await this.API.GetUserIDAsync(e.Command.ChatMessage.Channel);
+            var uptime = await this.API.GetUptimeAsync(id);
+
+            if (uptime != null)
+            {
+                // The description always starts with the first argument.
+                var description = e.Command.ArgumentsAsString;
+
+                var sb = new StringBuilder();
+                sb.AppendLine($"Description: {description}");
+                sb.AppendLine($"Bookmark Date/Time: {DateTimeOffset.Now}");
+                sb.AppendLine($"Uptime: {uptime?.ToString().Split('.')[0]}");
+
+                if (!Directory.Exists("./Bookmarks/"))
+                {
+                    Directory.CreateDirectory("./Bookmarks/");
+                }
+
+                Settings.SaveFileText($"./Bookmarks/{description.Substring(0, 32)}", sb.ToString());
+                this.TimeoutCommand("bookmark", 15);
+            }
+            else
+            {
+                this.SendTaggableMessage("Stream is offline, no bookmark made.", e);
+            }
         }
 
         private void Login_TwitchAuthenticated(object sender, TwitchAuthenticatedEventArgs e)
