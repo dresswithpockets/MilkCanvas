@@ -770,7 +770,7 @@
 
                 // we can ignore the command delay if the user is a mod or the broadcaster, we're only worried about
                 // spam from regular viewers and maybe subscribers.
-                var ignoreDelay = e.Command.ChatMessage.IsModerator || e.Command.ChatMessage.IsBroadcaster || !Settings.UseCommandDelay;
+                var ignoreDelay = e.Command.ChatMessage.IsBroadcaster || (e.Command.ChatMessage.IsModerator && Settings.ExemptModsFromDelay) || !Settings.UseCommandDelay;
 
                 if (ignoreDelay || !this.CommandTimedout(e.Command.CommandText))
                 {
