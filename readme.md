@@ -35,6 +35,7 @@ If you don't want this behaviour and have a secondary account specifically for c
 There are a few builtin commands in the current version of MilkCanvas. Click each one for details on the commands and how to use them. 
  
 - [!uptime](#uptime) 
+- [!help](#help)
 - [!commands](#commands) 
 - [!command](#command) 
 - [!alias](#alias) 
@@ -157,6 +158,10 @@ There are a few builtin commands in the current version of MilkCanvas. Click eac
 > ```
 > usage: !uptime
 > ```
+
+## Help
+
+> Links to this document!
  
 ## Commands 
  
