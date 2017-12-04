@@ -244,5 +244,30 @@
         {
             Settings.Save(modsCanPseudoTag: this.modsPseudoTagUsersCheckbox.Checked);
         }
+
+        private void ExemptModsDelayCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Save(exemptModsFromDelay: this.exemptModsDelayCheckbox.Checked);
+        }
+
+        private void ModsSetCommandsCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Save(modsSetChatCommands: this.modsSetCommandsCheckbox.Checked);
+        }
+
+        private void ModsRemoveCommandsCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Save(modsRemoveChatCommands: this.modsRemoveCommandsCheckbox.Checked);
+        }
+
+        private void ModsSetAliasesCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Save(modsSetAliases: this.modsSetAliasesCheckbox.Checked);
+        }
+
+        private void ModsRemoveAliasesCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Save(modsRemoveAliases: this.modsSetAliasesCheckbox.Checked);
+        }
     }
 }

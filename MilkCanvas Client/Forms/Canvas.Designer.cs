@@ -55,17 +55,36 @@
             this.modsPseudoTagUsersCheckbox = new System.Windows.Forms.CheckBox();
             this.tagUsersCheckbox = new System.Windows.Forms.CheckBox();
             this.permissionsSettingsTab = new System.Windows.Forms.TabPage();
+            this.label2 = new System.Windows.Forms.Label();
+            this.modsRemoveAliasesCheckbox = new System.Windows.Forms.CheckBox();
+            this.modsSetAliasesCheckbox = new System.Windows.Forms.CheckBox();
+            this.modsRemoveCommandsCheckbox = new System.Windows.Forms.CheckBox();
+            this.modsSetCommandsCheckbox = new System.Windows.Forms.CheckBox();
+            this.exemptModsDelayCheckbox = new System.Windows.Forms.CheckBox();
             this.pointsSettingsTab = new System.Windows.Forms.TabPage();
             this.loggingSettingsTab = new System.Windows.Forms.TabPage();
             this.notificationsSettingsTab = new System.Windows.Forms.TabPage();
             this.pollsSettingsTab = new System.Windows.Forms.TabPage();
             this.campaignsSettingsTab = new System.Windows.Forms.TabPage();
             this.bookmarksSettingsTab = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
             this.canvasTabs.SuspendLayout();
             this.generalSettingsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.reconnectNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.timeoutNumeric)).BeginInit();
             this.taggingSettingsTab.SuspendLayout();
+            this.permissionsSettingsTab.SuspendLayout();
+            this.pointsSettingsTab.SuspendLayout();
+            this.loggingSettingsTab.SuspendLayout();
+            this.notificationsSettingsTab.SuspendLayout();
+            this.pollsSettingsTab.SuspendLayout();
+            this.campaignsSettingsTab.SuspendLayout();
+            this.bookmarksSettingsTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // canvasTabs
@@ -81,11 +100,11 @@
             this.canvasTabs.Controls.Add(this.bookmarksSettingsTab);
             this.canvasTabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.canvasTabs.HotTrack = true;
-            this.canvasTabs.Location = new System.Drawing.Point(0, 20);
+            this.canvasTabs.Location = new System.Drawing.Point(0, 0);
             this.canvasTabs.Multiline = true;
             this.canvasTabs.Name = "canvasTabs";
             this.canvasTabs.SelectedIndex = 0;
-            this.canvasTabs.Size = new System.Drawing.Size(421, 359);
+            this.canvasTabs.Size = new System.Drawing.Size(421, 379);
             this.canvasTabs.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.canvasTabs.TabIndex = 1;
             // 
@@ -382,15 +401,86 @@
             // permissionsSettingsTab
             // 
             this.permissionsSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.permissionsSettingsTab.Controls.Add(this.label2);
+            this.permissionsSettingsTab.Controls.Add(this.modsRemoveAliasesCheckbox);
+            this.permissionsSettingsTab.Controls.Add(this.modsSetAliasesCheckbox);
+            this.permissionsSettingsTab.Controls.Add(this.modsRemoveCommandsCheckbox);
+            this.permissionsSettingsTab.Controls.Add(this.modsSetCommandsCheckbox);
+            this.permissionsSettingsTab.Controls.Add(this.exemptModsDelayCheckbox);
             this.permissionsSettingsTab.Location = new System.Drawing.Point(4, 40);
             this.permissionsSettingsTab.Name = "permissionsSettingsTab";
             this.permissionsSettingsTab.Size = new System.Drawing.Size(413, 315);
             this.permissionsSettingsTab.TabIndex = 1;
             this.permissionsSettingsTab.Text = "Permissions";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(8, 284);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(355, 26);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "These settings have higher precedent than your !permission\r\nsettings.";
+            // 
+            // modsRemoveAliasesCheckbox
+            // 
+            this.modsRemoveAliasesCheckbox.AutoSize = true;
+            this.modsRemoveAliasesCheckbox.Location = new System.Drawing.Point(6, 98);
+            this.modsRemoveAliasesCheckbox.Name = "modsRemoveAliasesCheckbox";
+            this.modsRemoveAliasesCheckbox.Size = new System.Drawing.Size(200, 17);
+            this.modsRemoveAliasesCheckbox.TabIndex = 6;
+            this.modsRemoveAliasesCheckbox.Text = "Moderators can remove aliases";
+            this.modsRemoveAliasesCheckbox.UseVisualStyleBackColor = true;
+            this.modsRemoveAliasesCheckbox.CheckedChanged += new System.EventHandler(this.ModsRemoveAliasesCheckbox_CheckedChanged);
+            // 
+            // modsSetAliasesCheckbox
+            // 
+            this.modsSetAliasesCheckbox.AutoSize = true;
+            this.modsSetAliasesCheckbox.Location = new System.Drawing.Point(6, 75);
+            this.modsSetAliasesCheckbox.Name = "modsSetAliasesCheckbox";
+            this.modsSetAliasesCheckbox.Size = new System.Drawing.Size(182, 17);
+            this.modsSetAliasesCheckbox.TabIndex = 5;
+            this.modsSetAliasesCheckbox.Text = "Moderators can set aliases";
+            this.modsSetAliasesCheckbox.UseVisualStyleBackColor = true;
+            this.modsSetAliasesCheckbox.CheckedChanged += new System.EventHandler(this.ModsSetAliasesCheckbox_CheckedChanged);
+            // 
+            // modsRemoveCommandsCheckbox
+            // 
+            this.modsRemoveCommandsCheckbox.AutoSize = true;
+            this.modsRemoveCommandsCheckbox.Location = new System.Drawing.Point(6, 52);
+            this.modsRemoveCommandsCheckbox.Name = "modsRemoveCommandsCheckbox";
+            this.modsRemoveCommandsCheckbox.Size = new System.Drawing.Size(236, 17);
+            this.modsRemoveCommandsCheckbox.TabIndex = 4;
+            this.modsRemoveCommandsCheckbox.Text = "Moderators can remove chat commands";
+            this.modsRemoveCommandsCheckbox.UseVisualStyleBackColor = true;
+            this.modsRemoveCommandsCheckbox.CheckedChanged += new System.EventHandler(this.ModsRemoveCommandsCheckbox_CheckedChanged);
+            // 
+            // modsSetCommandsCheckbox
+            // 
+            this.modsSetCommandsCheckbox.AutoSize = true;
+            this.modsSetCommandsCheckbox.Location = new System.Drawing.Point(6, 29);
+            this.modsSetCommandsCheckbox.Name = "modsSetCommandsCheckbox";
+            this.modsSetCommandsCheckbox.Size = new System.Drawing.Size(218, 17);
+            this.modsSetCommandsCheckbox.TabIndex = 3;
+            this.modsSetCommandsCheckbox.Text = "Moderators can set chat commands";
+            this.modsSetCommandsCheckbox.UseVisualStyleBackColor = true;
+            this.modsSetCommandsCheckbox.CheckedChanged += new System.EventHandler(this.ModsSetCommandsCheckbox_CheckedChanged);
+            // 
+            // exemptModsDelayCheckbox
+            // 
+            this.exemptModsDelayCheckbox.AutoSize = true;
+            this.exemptModsDelayCheckbox.Location = new System.Drawing.Point(6, 6);
+            this.exemptModsDelayCheckbox.Name = "exemptModsDelayCheckbox";
+            this.exemptModsDelayCheckbox.Size = new System.Drawing.Size(266, 17);
+            this.exemptModsDelayCheckbox.TabIndex = 2;
+            this.exemptModsDelayCheckbox.Text = "Exempt moderators from the command delay";
+            this.exemptModsDelayCheckbox.UseVisualStyleBackColor = true;
+            this.exemptModsDelayCheckbox.CheckedChanged += new System.EventHandler(this.ExemptModsDelayCheckbox_CheckedChanged);
+            // 
             // pointsSettingsTab
             // 
             this.pointsSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.pointsSettingsTab.Controls.Add(this.label3);
             this.pointsSettingsTab.Location = new System.Drawing.Point(4, 40);
             this.pointsSettingsTab.Name = "pointsSettingsTab";
             this.pointsSettingsTab.Size = new System.Drawing.Size(413, 315);
@@ -400,47 +490,107 @@
             // loggingSettingsTab
             // 
             this.loggingSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.loggingSettingsTab.Controls.Add(this.label4);
             this.loggingSettingsTab.Location = new System.Drawing.Point(4, 40);
             this.loggingSettingsTab.Name = "loggingSettingsTab";
-            this.loggingSettingsTab.Size = new System.Drawing.Size(413, 315);
+            this.loggingSettingsTab.Size = new System.Drawing.Size(413, 335);
             this.loggingSettingsTab.TabIndex = 4;
             this.loggingSettingsTab.Text = "Logging";
             // 
             // notificationsSettingsTab
             // 
             this.notificationsSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.notificationsSettingsTab.Controls.Add(this.label5);
             this.notificationsSettingsTab.Location = new System.Drawing.Point(4, 40);
             this.notificationsSettingsTab.Name = "notificationsSettingsTab";
-            this.notificationsSettingsTab.Size = new System.Drawing.Size(413, 315);
+            this.notificationsSettingsTab.Size = new System.Drawing.Size(413, 335);
             this.notificationsSettingsTab.TabIndex = 5;
             this.notificationsSettingsTab.Text = "Notifications";
             // 
             // pollsSettingsTab
             // 
             this.pollsSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.pollsSettingsTab.Controls.Add(this.label6);
             this.pollsSettingsTab.Location = new System.Drawing.Point(4, 40);
             this.pollsSettingsTab.Name = "pollsSettingsTab";
-            this.pollsSettingsTab.Size = new System.Drawing.Size(413, 315);
+            this.pollsSettingsTab.Size = new System.Drawing.Size(413, 335);
             this.pollsSettingsTab.TabIndex = 6;
             this.pollsSettingsTab.Text = "Polls";
             // 
             // campaignsSettingsTab
             // 
             this.campaignsSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.campaignsSettingsTab.Controls.Add(this.label7);
             this.campaignsSettingsTab.Location = new System.Drawing.Point(4, 40);
             this.campaignsSettingsTab.Name = "campaignsSettingsTab";
-            this.campaignsSettingsTab.Size = new System.Drawing.Size(413, 315);
+            this.campaignsSettingsTab.Size = new System.Drawing.Size(413, 335);
             this.campaignsSettingsTab.TabIndex = 7;
             this.campaignsSettingsTab.Text = "Campaigns";
             // 
             // bookmarksSettingsTab
             // 
             this.bookmarksSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.bookmarksSettingsTab.Controls.Add(this.label8);
             this.bookmarksSettingsTab.Location = new System.Drawing.Point(4, 40);
             this.bookmarksSettingsTab.Name = "bookmarksSettingsTab";
-            this.bookmarksSettingsTab.Size = new System.Drawing.Size(413, 315);
+            this.bookmarksSettingsTab.Size = new System.Drawing.Size(413, 335);
             this.bookmarksSettingsTab.TabIndex = 8;
             this.bookmarksSettingsTab.Text = "Bookmarks";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 6);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(79, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Coming Soon!";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 6);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(79, 13);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "Coming Soon!";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 6);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(79, 13);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "Coming Soon!";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 6);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(79, 13);
+            this.label6.TabIndex = 9;
+            this.label6.Text = "Coming Soon!";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 6);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(79, 13);
+            this.label7.TabIndex = 9;
+            this.label7.Text = "Coming Soon!";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 6);
+            this.label8.Name = "label8";
+            this.label8.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label8.Size = new System.Drawing.Size(79, 13);
+            this.label8.TabIndex = 9;
+            this.label8.Text = "Coming Soon!";
             // 
             // Canvas
             // 
@@ -461,6 +611,20 @@
             ((System.ComponentModel.ISupportInitialize)(this.timeoutNumeric)).EndInit();
             this.taggingSettingsTab.ResumeLayout(false);
             this.taggingSettingsTab.PerformLayout();
+            this.permissionsSettingsTab.ResumeLayout(false);
+            this.permissionsSettingsTab.PerformLayout();
+            this.pointsSettingsTab.ResumeLayout(false);
+            this.pointsSettingsTab.PerformLayout();
+            this.loggingSettingsTab.ResumeLayout(false);
+            this.loggingSettingsTab.PerformLayout();
+            this.notificationsSettingsTab.ResumeLayout(false);
+            this.notificationsSettingsTab.PerformLayout();
+            this.pollsSettingsTab.ResumeLayout(false);
+            this.pollsSettingsTab.PerformLayout();
+            this.campaignsSettingsTab.ResumeLayout(false);
+            this.campaignsSettingsTab.PerformLayout();
+            this.bookmarksSettingsTab.ResumeLayout(false);
+            this.bookmarksSettingsTab.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -500,5 +664,17 @@
         private System.Windows.Forms.TabPage pollsSettingsTab;
         private System.Windows.Forms.TabPage campaignsSettingsTab;
         private System.Windows.Forms.TabPage bookmarksSettingsTab;
+        private System.Windows.Forms.CheckBox exemptModsDelayCheckbox;
+        private System.Windows.Forms.CheckBox modsRemoveAliasesCheckbox;
+        private System.Windows.Forms.CheckBox modsSetAliasesCheckbox;
+        private System.Windows.Forms.CheckBox modsRemoveCommandsCheckbox;
+        private System.Windows.Forms.CheckBox modsSetCommandsCheckbox;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
     }
 }
