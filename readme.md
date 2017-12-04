@@ -126,7 +126,7 @@ There are a few builtin commands in the current version of MilkCanvas. Click eac
 
 ## Permissions
 
-### Exempt Moderators From The Command Delay
+### Exempt Moderators From Command Delay
 
 > Moderators are not affected by command delays if this is enabled.
 
@@ -229,4 +229,4 @@ There are a few builtin commands in the current version of MilkCanvas. Click eac
 > - The date the bookmark was made.
 > - The Uptime since the stream started. This can be used to deduce the stream date if the stream started on a different day.
 >
-> Bookmarks cannot be made within 15 seconds of eachother; bookmarks made by the broadcaster ignore this delay.
+> Bookmarks cannot be made within 15 seconds of eachother; bookmarks made by the broadcaster ignore this delay. Moderators are not ignored unless the are [exempted.](#Exempt-Moderators-From-Command-Delay)
