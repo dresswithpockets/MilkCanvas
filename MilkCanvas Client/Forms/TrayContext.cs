@@ -492,27 +492,26 @@
 
                         if (args.Count >= 3)
                         {
-                            var message = args[2];
+                            var messageBuilder = new StringBuilder();
+                            for (var i = 2; i < args.Count; i++)
+                            {
+                                messageBuilder.Append(args[i]);
+                                messageBuilder.Append(" ");
+                            }
 
                             if (e.Command.ChatMessage.IsBroadcaster || (e.Command.ChatMessage.IsModerator && Settings.ModsSetChatCommands))
                             {
                                 // set commands
                                 var setCommand = this.FindChatCommand(alteredCommand);
-                                if (setCommand == null)
-                                {
-                                    // the command doesnt exist, so lets just add a new command
-                                    this.chatCommands.Add(new MChatCommand(alteredCommand, message));
-                                    this.ChatClient.SendMessage(e.Command.ChatMessage.Channel, $"Added command: !{alteredCommand}");
-                                    Settings.SaveCommands(this.chatCommands);
-                                }
-                                else
+                                if (setCommand != null)
                                 {
                                     // the command already exists, so replace it with the updated command.
                                     this.chatCommands.Remove(setCommand);
-                                    this.chatCommands.Add(new MChatCommand(alteredCommand, message));
-                                    this.ChatClient.SendMessage(e.Command.ChatMessage.Channel, $"Updated command: !{alteredCommand}");
-                                    Settings.SaveCommands(this.chatCommands);
                                 }
+
+                                this.chatCommands.Add(new MChatCommand(alteredCommand, messageBuilder.ToString()));
+                                this.ChatClient.SendMessage(e.Command.ChatMessage.Channel, $"Set command: !{alteredCommand}");
+                                Settings.SaveCommands(this.chatCommands);
                             }
                         }
 
