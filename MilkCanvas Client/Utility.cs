@@ -9,7 +9,7 @@
     using System.Threading.Tasks;
     using TwitchLib;
 
-    public class Utility
+    public static class Utility
     {
 
         public static string Get(string uri)
@@ -41,6 +41,24 @@
         public static string GetDisplayNameFromID(TwitchAPI api, string userid)
         {
             return api.Users.v5.GetUserByIDAsync(userid).GetAwaiter().GetResult().DisplayName;
+        }
+
+        public static async Task<string> GetUserIDAsync(this TwitchAPI api, string username)
+        {
+            var user = await api.Users.v5.GetUserByNameAsync(username);
+            return user.Matches[0].Id;
+        }
+
+        public static async Task<TimeSpan?> GetUptimeAsync(this TwitchAPI api, string channelId)
+        {
+            if (await api.Streams.v5.BroadcasterOnlineAsync(channelId))
+            {
+                return await api.Streams.v5.GetUptimeAsync(channelId);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
