@@ -53,7 +53,7 @@ Toggle this checkbox on if you want to use another account for the chatbot.
  
 Adjacent to the checkbox is a Twitch Connect button. Click this button to be taken to a new page to authorize your alternate account. 
  
-**IMPORTANT: Log out of your main twitch account in your web browser. It will automatically authorize your main twitch account if you're still logged into it.** 
+> IMPORTANT: Log out of your main twitch account in your web browser. It will automatically authorize your main twitch account if you're still logged into it.
  
 ### Relay Message After a New Subscription 
  
@@ -91,7 +91,7 @@ There are some variables you can use here, too.
  
 ### Relay Message After a Gifted Subscription 
  
-***This feature is not live yet.*** 
+> ***This feature is not live yet.*** 
  
 Toggle this checkbox and fill in the text box below with a message to relay every time you get a gifted subscriber. Messages are relayed in chat by the selected Chatbot. 
  
@@ -129,22 +129,26 @@ Example usage
 Here are all of the immediately available built-in command in the latest version of MilkCanvas.  
  
 ## Uptime 
- 
-``` 
-!uptime - Prints the current uptime of the stream, if the stream is live. 
-``` 
+
+> Prints the current uptime of the stream, if the stream is live. 
+
+```
+usage: !uptime
+```
  
 ## Commands 
  
-``` 
-!commands - Prints a list of all of the available commands. 
-``` 
+> Prints a list of all of the available commands. 
+
+```
+usage: !commands
+```
  
 ## Command 
  
+> Creates, deletes, or updates chat commands. 
+
 ``` 
-!command - Creates, deletes, or updates chat commands. 
- 
 Usage: !command [set|clear] [command] [set:message ...] 
  
 Examples: 
@@ -155,9 +159,9 @@ Examples:
  
 ## Alias 
  
-``` 
-!alias - Creates or removes aliases for existing commands. 
+> Creates or removes aliases for existing commands. 
  
+```
 Usage: !alias [set|clear] [alias] [command] 
  
 Examples: 
@@ -171,9 +175,9 @@ To remove the alias:
  
 ## Permission 
  
-``` 
-!permission - Changes the permissions required to run a command. 
- 
+> Changes the permissions required to run a command. 
+
+```
 Usage: !permission [command] [host|mod|sub|all] 
  
 Broadcaster/Channel Owner only: 
@@ -191,12 +195,10 @@ Everyone:
  
 ## Bookmark 
  
+> !bookmark - Flags the current timestamp in the stream and saves it. 
+
 ``` 
-!bookmark - Flags the current timestamp in the stream and saves it. 
- 
 Usage: !bookmark (description) 
 ``` 
- 
-**Details** 
- 
-This command will save a timestamp along with the time that the stream started in a bookmarks file. You can export bookmarks in [Canvas](#canvas).
+
+> *This command will save a timestamp along with the time that the stream started in a bookmarks file. You can export bookmarks in [Canvas](#canvas).*
