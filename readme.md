@@ -1,11 +1,9 @@
 ﻿# MilkCanvas 
- 
-## Welcome 
- 
-### Preface 
- 
+
+# Welcome
+
 Thank you for using MilkCanvas for your interactive tiwtch bot needs <3 
- 
+
 MilkCanvas is rolling release. this means that features are addes as they're implemented and tested with integration. 
  
 If you experience a bug, please report them! I'm dedicated to fixing bugs and unexpected behaviour in a matter of days, if not hours. 
@@ -14,9 +12,9 @@ You can [email me](mailto:tristen@tristenhorton.com) or add me on [steam](http:/
  
 **Below is a guide for getting started. Below that is a section explaining in detail what every setting does.** 
  
-## Getting Started 
+# Getting Started 
  
-### Using MilkCanvas 
+## Using MilkCanvas 
  
 MilkCanvas exists in your Notification Tray. 
  
@@ -24,7 +22,7 @@ Double clicking the icon will open [Canvas](#canvas).
  
 Alternatively, right clicking the icon will show a menu of additional options to choose from. 
  
-### Setting Up Chat Bot 
+## Setting Up Chat Bot 
  
 If you've already logged into MilkCanvas using your streaming account, you're already half way finished. 
  
@@ -32,7 +30,7 @@ By default, chat commands and messages relayed via MilkCanvas will be sent throu
  
 If you don't want this behaviour and have a secondary account specifically for chat bot, check out [Alternate Account for Chatbot](#alternate-account-for-chatbot) 
  
-### Built-In Commands 
+## Built-In Commands
  
 There are a few builtin commands in the current version of MilkCanvas. Click each one for details on the commands and how to use them. 
  
@@ -43,9 +41,11 @@ There are a few builtin commands in the current version of MilkCanvas. Click eac
 - [!permission](#permission) 
 - [!bookmark](#bookmark) 
  
-## Canvas 
- 
+# Canvas 
+
 Canvas is similar to a settings or preferences menu. The following are all of the options available in Canvas and the nuances of each option. 
+
+## General Settings 
  
 ### Alternate Account for Chatbot 
  
@@ -104,24 +104,43 @@ Toggle this checkbox and change the numeric counter below to the number of secon
 Toggle this checkbox and change the numeric counter below to the number of seconds you'd like MilkCanvas to wait before retrying to connect. 
  
 **10 seconds is the recommended delay.** 
+
+## Tagging and Mentions
+
+### Tag Users Who Call Commands
+
+Only certain commands utilize this feature.
+
+Enabling this will inform the chatbot to @Tag the person who used the command.
+
+### Moderators Can Pseudo Tag Users
+
+Enabling this will allow moderators to tell the chatbot who should be tagged.
+
+Example usage
+
+```
+!uptime @otherPerson
+!commands @otherPerson
+```
  
-## Built-in Commands 
+# Built-in Commands Extended
  
 Here are all of the immediately available built-in command in the latest version of MilkCanvas.  
  
-### Uptime 
+## Uptime 
  
 ``` 
 !uptime - Prints the current uptime of the stream, if the stream is live. 
 ``` 
  
-### Commands 
+## Commands 
  
 ``` 
 !commands - Prints a list of all of the available commands. 
 ``` 
  
-### Command 
+## Command 
  
 ``` 
 !command - Creates, deletes, or updates chat commands. 
@@ -134,7 +153,7 @@ Examples:
 !command clear social 
 ``` 
  
-### Alias 
+## Alias 
  
 ``` 
 !alias - Creates or removes aliases for existing commands. 
@@ -150,7 +169,7 @@ To remove the alias:
 !alias clear s 
 ``` 
  
-### Permission 
+## Permission 
  
 ``` 
 !permission - Changes the permissions required to run a command. 
@@ -170,7 +189,7 @@ Everyone:
 !permission social all 
 ``` 
  
-### Bookmark 
+## Bookmark 
  
 ``` 
 !bookmark - Flags the current timestamp in the stream and saves it. 
