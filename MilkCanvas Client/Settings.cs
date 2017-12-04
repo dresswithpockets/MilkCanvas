@@ -272,6 +272,32 @@
                 UpdateSetting(modsCanPseudoTagKey, modsCanPseudoTag.Value.ToString());
             }
 
+            // permissions
+            if (exemptModsFromDelay != null)
+            {
+                UpdateSetting(exemptModsFromDelayKey, exemptModsFromDelay.Value.ToString());
+            }
+
+            if (modsSetChatCommands != null)
+            {
+                UpdateSetting(modsSetChatCommandsKey, modsSetChatCommands.Value.ToString());
+            }
+
+            if (modsRemoveChatCommands != null)
+            {
+                UpdateSetting(modsRemoveChatCommandsKey, modsRemoveChatCommands.Value.ToString());
+            }
+
+            if (modsSetAliases != null)
+            {
+                UpdateSetting(modsSetAliasesKey, modsSetAliases.Value.ToString());
+            }
+
+            if (modsRemoveAliases != null)
+            {
+                UpdateSetting(modsRemoveAliasesKey, modsRemoveAliases.Value.ToString());
+            }
+
             config.Save();
         }
 
