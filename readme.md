@@ -2,7 +2,7 @@
 
 # Welcome
 
-Thank you for using MilkCanvas for your interactive tiwtch bot needs <3 
+Thank you for using MilkCanvas for your interactive twitch bot needs <3 
 
 MilkCanvas is rolling release. this means that features are addes as they're implemented and tested with integration. 
  
