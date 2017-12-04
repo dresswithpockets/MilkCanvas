@@ -4,7 +4,7 @@
 
 Thank you for using MilkCanvas for your interactive twitch bot needs <3 
 
-MilkCanvas is rolling release. this means that features are addes as they're implemented and tested with integration. 
+MilkCanvas is rolling release. this means that features are added as they're implemented and tested with integration. 
  
 If you experience a bug, please report them! I'm dedicated to fixing bugs and unexpected behaviour in a matter of days, if not hours. 
  
