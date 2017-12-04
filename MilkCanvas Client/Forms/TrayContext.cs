@@ -449,12 +449,12 @@
         private async void Uptime_ChatCommand(object sender, OnChatCommandReceivedArgs e)
         {
             var response = string.Empty;
-            var user = await this.API.Users.v5.GetUserByNameAsync(e.Command.ChatMessage.Channel);
-            var id = user.Matches[0].Id;
-            if (await this.API.Streams.v5.BroadcasterOnlineAsync(id))
+            var id = await this.API.GetUserIDAsync(e.Command.ChatMessage.Channel);
+            var uptime = await this.API.GetUptimeAsync(id);
+
+            if (uptime != null)
             {
-                var time = await this.API.Streams.v5.GetUptimeAsync(id);
-                response = $"Uptime: {time?.ToString().Split('.')[0]}";
+                response = $"Uptime: {uptime?.ToString().Split('.')[0]}";
             }
             else
             {
