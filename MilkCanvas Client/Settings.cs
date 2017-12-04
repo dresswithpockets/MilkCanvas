@@ -37,6 +37,9 @@
         private const string reconnectCanvasKey = "ReconnectCanvas";
         private const string reconnectDelayKey = "ReconnectDelay";
 
+        private const string tagUsersKey = "TagUsers";
+        private const string modsCanPseudoTagKey = "ModsCanPseudoTag";
+
         private const string exemptModsFromDelayKey = "ExemptModsFromDelay";
         private const string modsSetChatCommandsKey = "ModsSetChatCommands";
         private const string modsRemoveChatCommandsKey = "ModsRemoveChatCommands";
@@ -63,301 +66,86 @@
 
         public static bool FirstLaunch => GetSetting(launchedKey) == null;
 
-        public static string State
-        {
-            get
-            {
-                var setting = GetSetting(stateKey);
-                if (setting != null)
-                {
-                    return setting.Value;
-                }
+        public static string State => GetString(stateKey);
 
-                return null;
-            }
-        }
+        public static string TwitchSubject => GetString(twitchSubjectKey);
 
-        public static string TwitchSubject
-        {
-            get
-            {
-                var setting = GetSetting(twitchSubjectKey);
-                if (setting != null)
-                {
-                    return setting.Value;
-                }
+        public static string TwitchAccessToken => GetString(twitchAccessTokenKey);
 
-                return null;
-            }
-        }
+        public static bool UseAlternateAccount => GetBool(useAlternateAccountKey);
 
-        public static string TwitchAccessToken
-        {
-            get
-            {
-                var setting = GetSetting(twitchAccessTokenKey);
-                if (setting != null)
-                {
-                    return setting.Value;
-                }
+        public static string AltTwitchSubject => GetString(altTwitchSubjectKey);
 
-                return null;
-            }
-        }
+        public static string AltTwitchAccessToken => GetString(altTwitchAccessTokenKey);
 
-        public static bool UseAlternateAccount
-        {
-            get
-            {
-                var setting = GetSetting(useAlternateAccountKey);
-                if (setting != null)
-                {
-                    return bool.TrueString.Equals(setting.Value);
-                }
+        public static bool UseSubMessage => GetBool(useSubMessageKey);
 
-                return false;
-            }
-        }
+        public static string SubMessage => GetString(subMessageKey);
 
-        public static string AltTwitchSubject
-        {
-            get
-            {
-                var setting = GetSetting(altTwitchSubjectKey);
-                if (setting != null)
-                {
-                    return setting.Value;
-                }
+        public static bool UseResubMessage => GetBool(useResubMessageKey);
 
-                return null;
-            }
-        }
+        public static string ResubMessage => GetString(resubMessageKey);
 
-        public static string AltTwitchAccessToken
-        {
-            get
-            {
-                var setting = GetSetting(altTwitchAccessTokenKey);
-                if (setting != null)
-                {
-                    return setting.Value;
-                }
+        public static bool UseGiftedSubMessage => GetBool(useGiftedSubMessageKey);
 
-                return null;
-            }
-        }
+        public static string GiftedSubMessage => GetString(giftedSubMessageKey);
 
-        public static bool UseSubMessage
-        {
-            get
-            {
-                var setting = GetSetting(useSubMessageKey);
-                if (setting != null)
-                {
-                    return bool.TrueString.Equals(setting.Value);
-                }
+        public static bool UseCommandDelay => GetBool(useCommandDelayKey);
 
-                return false;
-            }
-        }
+        public static int CommandDelay => GetInt(commandDelayKey);
 
-        public static string SubMessage
-        {
-            get
-            {
-                var setting = GetSetting(subMessageKey);
-                if (setting != null)
-                {
-                    return setting.Value;
-                }
+        public static bool ReconnectCanvas => GetBool(reconnectCanvasKey);
 
-                return null;
-            }
-        }
+        public static int ReconnectDelay => GetInt(reconnectDelayKey);
 
-        public static bool UseResubMessage
-        {
-            get
-            {
-                var setting = GetSetting(useResubMessageKey);
-                if (setting != null)
-                {
-                    return bool.TrueString.Equals(setting.Value);
-                }
+        public static bool TagUsers => GetBool(tagUsersKey);
 
-                return false;
-            }
-        }
+        public static bool ModsCanPseudoTag => GetBool(modsCanPseudoTagKey);
 
-        public static string ResubMessage
-        {
-            get
-            {
-                var setting = GetSetting(resubMessageKey);
-                if (setting != null)
-                {
-                    return setting.Value;
-                }
+        public static bool ExemptModsFromDelay => GetBool(exemptModsFromDelayKey);
 
-                return null;
-            }
-        }
+        public static bool ModsSetChatCommands => GetBool(modsSetChatCommandsKey);
 
-        public static bool UseGiftedSubMessage
-        {
-            get
-            {
-                var setting = GetSetting(useGiftedSubMessageKey);
-                if (setting != null)
-                {
-                    return bool.TrueString.Equals(setting.Value);
-                }
+        public static bool ModsRemoveChatCommands => GetBool(modsRemoveChatCommandsKey);
 
-                return false;
-            }
-        }
+        public static bool ModsSetAliases => GetBool(modsSetAliasesKey);
 
-        public static string GiftedSubMessage
-        {
-            get
-            {
-                var setting = GetSetting(giftedSubMessageKey);
-                if (setting != null)
-                {
-                    return setting.Value;
-                }
-
-                return null;
-            }
-        }
-
-        public static bool UseCommandDelay
-        {
-            get
-            {
-                var setting = GetSetting(useCommandDelayKey);
-                if (setting != null)
-                {
-                    return bool.TrueString.Equals(setting.Value);
-                }
-
-                return false;
-            }
-        }
-
-        public static int CommandDelay
-        {
-            get
-            {
-                var setting = GetSetting(commandDelayKey);
-                if (setting != null && int.TryParse(setting.Value, out var value))
-                {
-                    return value;
-                }
-
-                return 0;
-            }
-        }
-
-        public static bool ReconnectCanvas
-        {
-            get
-            {
-                var setting = GetSetting(reconnectCanvasKey);
-                if (setting != null)
-                {
-                    return bool.TrueString.Equals(setting.Value);
-                }
-
-                return false;
-            }
-        }
-
-        public static int ReconnectDelay
-        {
-            get
-            {
-                var setting = GetSetting(reconnectDelayKey);
-                if (setting != null && int.TryParse(setting.Value, out var value))
-                {
-                    return value;
-                }
-
-                return 0;
-            }
-        }
-
-        public static bool ExemptModsFromDelay
-        {
-            get
-            {
-                var setting = GetSetting(exemptModsFromDelayKey);
-                if (setting != null)
-                {
-                    return bool.TrueString.Equals(setting.Value);
-                }
-
-                return false;
-            }
-        }
-
-        public static bool ModsSetChatCommands
-        {
-            get
-            {
-                var setting = GetSetting(modsSetChatCommandsKey);
-                if (setting != null)
-                {
-                    return bool.TrueString.Equals(setting.Value);
-                }
-
-                return false;
-            }
-        }
-
-        public static bool ModsRemoveChatCommands
-        {
-            get
-            {
-                var setting = GetSetting(modsRemoveChatCommandsKey);
-                if (setting != null)
-                {
-                    return bool.TrueString.Equals(setting.Value);
-                }
-
-                return false;
-            }
-        }
-
-        public static bool ModsSetAliases
-        {
-            get
-            {
-                var setting = GetSetting(modsSetAliasesKey);
-                if (setting != null)
-                {
-                    return bool.TrueString.Equals(setting.Value);
-                }
-
-                return false;
-            }
-        }
-
-        public static bool ModsRemoveAliases
-        {
-            get
-            {
-                var setting = GetSetting(modsRemoveAliasesKey);
-                if (setting != null)
-                {
-                    return bool.TrueString.Equals(setting.Value);
-                }
-
-                return false;
-            }
-        }
+        public static bool ModsRemoveAliases => GetBool(modsRemoveAliasesKey);
 
         public static KeyValueConfigurationElement GetSetting(string key) => config.AppSettings.Settings[key];
+
+        public static bool GetBool(string key)
+        {
+            var setting = GetSetting(key);
+            if (setting != null)
+            {
+                return bool.TrueString.Equals(setting.Value);
+            }
+
+            return false;
+        }
+
+        public static string GetString(string key)
+        {
+            var setting = GetSetting(key);
+            if (setting != null)
+            {
+                return setting.Value;
+            }
+
+            return null;
+        }
+
+        public static int GetInt(string key)
+        {
+            var setting = GetSetting(key);
+            if (setting != null && int.TryParse(setting.Value, out var value))
+            {
+                return value;
+            }
+
+            return 0;
+        }
 
         public static void Save(
             bool? firstLaunch = null,
@@ -377,6 +165,8 @@
             int? commandDelay = null,
             bool? reconnectCanvas = null,
             int? reconnectDelay = null,
+            bool? tagUsers = null,
+            bool? modsCanPseudoTag = null,
             bool? exemptModsFromDelay = null,
             bool? modsSetChatCommands = null,
             bool? modsRemoveChatCommands = null,
@@ -469,6 +259,17 @@
             if (reconnectDelay != null)
             {
                 UpdateSetting(reconnectDelayKey, reconnectDelay.Value.ToString());
+            }
+
+            // tagging options
+            if (tagUsers != null)
+            {
+                UpdateSetting(tagUsersKey, tagUsers.Value.ToString());
+            }
+
+            if (modsCanPseudoTag != null)
+            {
+                UpdateSetting(modsCanPseudoTagKey, modsCanPseudoTag.Value.ToString());
             }
 
             config.Save();
