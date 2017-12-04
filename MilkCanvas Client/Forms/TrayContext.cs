@@ -373,6 +373,7 @@
         {
             this.builtinCommands = new List<Command>();
             this.builtinCommands.Add(new Command("uptime", "Prints the current uptime of the stream, if its live.", this.Uptime_ChatCommand));
+            this.builtinCommands.Add(new Command("help", "Links to the help document at https://phxvyper.github.io/MilkCanvas", this.Help_ChatCommand));
             this.builtinCommands.Add(new Command("commands", "Prints a list of all of the available commands.", this.Commands_ChatCommand));
             this.builtinCommands.Add(new Command("command", "Handles the creation, deleting and update of chat commands.", this.Command_ChatCommand));
             this.builtinCommands.Add(new Command("alias", "Creates or removes aliases for existing commands.", this.Alias_ChatCommand));
@@ -451,6 +452,11 @@
             }
 
             this.SendTaggableMessage(response, e);
+        }
+
+        private void Help_ChatCommand(object sender, OnChatCommandReceivedArgs e)
+        {
+            this.SendTaggableMessage("View Help at https://phxvyper.github.io/MilkCanvas", e);
         }
 
         private void Commands_ChatCommand(object sender, OnChatCommandReceivedArgs e)
