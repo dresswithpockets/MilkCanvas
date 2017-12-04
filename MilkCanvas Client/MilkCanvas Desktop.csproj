@@ -102,7 +102,7 @@
     <Compile Include="Controls\TablessTabControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Enums\Group.cs" />
+    <Compile Include="Enums\UserGroup.cs" />
     <Compile Include="Enums\SocialPlatform.cs" />
     <Compile Include="Forms\About.cs">
       <SubType>Form</SubType>
