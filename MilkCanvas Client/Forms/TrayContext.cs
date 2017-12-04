@@ -173,9 +173,19 @@
             return null;
         }
 
-        public void TimeoutCommand(string command)
+        public void TimeoutCommand(string command, int? timeout = null)
         {
-            var timer = new STimer(Settings.CommandDelay * 1000);
+            var time = 0;
+            if (timeout != null)
+            {
+                time = timeout.Value;
+            }
+            else
+            {
+                time = Settings.CommandDelay;
+            }
+
+            var timer = new STimer(time * 1000);
             timer.Elapsed += (sender, e) =>
             {
                 this.RemoveCommandTimeout(command);
