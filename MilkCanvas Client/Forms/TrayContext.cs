@@ -866,7 +866,7 @@
 
         private void TrayIcon_CheckForUpdates(object sender, EventArgs e)
         {
-            // TODO: Implement update system
+            // TODO: Implement update system, preferrably NAppUpdate
         }
 
         private void TrayIcon_Canvas(object sender, EventArgs e)
