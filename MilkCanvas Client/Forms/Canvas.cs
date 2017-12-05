@@ -20,6 +20,7 @@
     public partial class Canvas : BaseForm
     {
         private string hashFile = "hash";
+        private int? hotkey;
         private TrayContext context;
 
         public Canvas(TrayContext context)
@@ -77,6 +78,8 @@
 
             this.SetupGeneralSettings();
             this.SetupTagginSettings();
+            this.SetupPermissionsSettings();
+            this.SetupBookmarkSettings();
         }
 
         /// <summary>
@@ -134,6 +137,38 @@
         {
             this.tagUsersCheckbox.Checked = Settings.TagUsers;
             this.modsPseudoTagUsersCheckbox.Checked = Settings.ModsCanPseudoTag;
+        }
+
+        private void SetupPermissionsSettings()
+        {
+            this.exemptModsDelayCheckbox.Checked = Settings.ExemptModsFromDelay;
+            this.modsSetCommandsCheckbox.Checked = Settings.ModsSetChatCommands;
+            this.modsRemoveCommandsCheckbox.Checked = Settings.ModsRemoveChatCommands;
+            this.modsSetAliasesCheckbox.Checked = Settings.ModsSetAliases;
+            this.modsRemoveAliasesCheckbox.Checked = Settings.ModsRemoveAliases;
+        }
+
+        private void SetupBookmarkSettings()
+        {
+            this.hotkeyComboBox.Items.AddRange(Enum.GetNames(typeof(Keys)));
+
+            this.useBookmarkHotkeyCheckbox.Checked = Settings.UseBookmarkHotkey;
+
+            var modifier = (KeyModifiers)Settings.BookmarkModifiers;
+            var key = (Keys)Settings.BookmarkHotkey;
+            this.controlCheckbox.Checked = (modifier & KeyModifiers.Control) == KeyModifiers.Control;
+            this.altCheckbox.Checked = (modifier & KeyModifiers.Alt) == KeyModifiers.Alt;
+            this.shiftCheckbox.Checked = (modifier & KeyModifiers.Shift) == KeyModifiers.Shift;
+
+            for (var i = 0; i < this.hotkeyComboBox.Items.Count; i++)
+            {
+                var item = this.hotkeyComboBox.Items[i];
+                if (item.ToString() == ((Keys)Settings.BookmarkHotkey).ToString())
+                {
+                    this.hotkeyComboBox.SelectedIndex = i;
+                    break;
+                }
+            }
         }
 
         private void SubmitTwitchVerification(TwitchHashFile hash)
@@ -268,6 +303,54 @@
         private void ModsRemoveAliasesCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Save(modsRemoveAliases: this.modsSetAliasesCheckbox.Checked);
+        }
+
+        private void UseBookmarkHotkeyCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            var value = this.useBookmarkHotkeyCheckbox.Checked;
+            this.controlCheckbox.Enabled = value;
+            this.altCheckbox.Enabled = value;
+            this.shiftCheckbox.Enabled = value;
+            this.hotkeyComboBox.Enabled = value;
+            Settings.Save(useBookmarkHotkey: value);
+        }
+
+        private void UpdateHotkey(object sender, EventArgs e)
+        {
+            var modifier = (KeyModifiers)0;
+
+            if (this.controlCheckbox.Checked)
+            {
+                modifier |= KeyModifiers.Control;
+            }
+
+            if (this.altCheckbox.Checked)
+            {
+                modifier |= KeyModifiers.Alt;
+            }
+
+            if (this.shiftCheckbox.Checked)
+            {
+                modifier |= KeyModifiers.Shift;
+            }
+
+            int? key = null;
+            if (Enum.TryParse<KeyModifiers>(this.hotkeyComboBox.SelectedText, out var value))
+            {
+                key = (int)value;
+            }
+
+            Settings.Save(bookmarkModifiers: (int)modifier, bookmarkHotkey: key);
+
+            if (this.hotkey != null)
+            {
+                HotKeyManager.UnregisterHotKey(this.hotkey.Value);
+            }
+
+            if (key != null)
+            {
+                this.hotkey = HotKeyManager.RegisterHotKey((Keys)key.Value, modifier);
+            }
         }
     }
 }

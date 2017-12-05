@@ -62,16 +62,23 @@
             this.modsSetCommandsCheckbox = new System.Windows.Forms.CheckBox();
             this.exemptModsDelayCheckbox = new System.Windows.Forms.CheckBox();
             this.pointsSettingsTab = new System.Windows.Forms.TabPage();
-            this.loggingSettingsTab = new System.Windows.Forms.TabPage();
-            this.notificationsSettingsTab = new System.Windows.Forms.TabPage();
-            this.pollsSettingsTab = new System.Windows.Forms.TabPage();
-            this.campaignsSettingsTab = new System.Windows.Forms.TabPage();
-            this.bookmarksSettingsTab = new System.Windows.Forms.TabPage();
             this.label3 = new System.Windows.Forms.Label();
+            this.loggingSettingsTab = new System.Windows.Forms.TabPage();
             this.label4 = new System.Windows.Forms.Label();
+            this.notificationsSettingsTab = new System.Windows.Forms.TabPage();
             this.label5 = new System.Windows.Forms.Label();
+            this.pollsSettingsTab = new System.Windows.Forms.TabPage();
             this.label6 = new System.Windows.Forms.Label();
+            this.campaignsSettingsTab = new System.Windows.Forms.TabPage();
             this.label7 = new System.Windows.Forms.Label();
+            this.bookmarksSettingsTab = new System.Windows.Forms.TabPage();
+            this.hotkeyComboBox = new System.Windows.Forms.ComboBox();
+            this.hotkeyLabelRight = new System.Windows.Forms.Label();
+            this.shiftCheckbox = new System.Windows.Forms.CheckBox();
+            this.altCheckbox = new System.Windows.Forms.CheckBox();
+            this.controlCheckbox = new System.Windows.Forms.CheckBox();
+            this.hotkeyLabelLeft = new System.Windows.Forms.Label();
+            this.useBookmarkHotkeyCheckbox = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.canvasTabs.SuspendLayout();
             this.generalSettingsTab.SuspendLayout();
@@ -100,11 +107,11 @@
             this.canvasTabs.Controls.Add(this.bookmarksSettingsTab);
             this.canvasTabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.canvasTabs.HotTrack = true;
-            this.canvasTabs.Location = new System.Drawing.Point(0, 0);
+            this.canvasTabs.Location = new System.Drawing.Point(0, 20);
             this.canvasTabs.Multiline = true;
             this.canvasTabs.Name = "canvasTabs";
             this.canvasTabs.SelectedIndex = 0;
-            this.canvasTabs.Size = new System.Drawing.Size(421, 379);
+            this.canvasTabs.Size = new System.Drawing.Size(421, 359);
             this.canvasTabs.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.canvasTabs.TabIndex = 1;
             // 
@@ -487,56 +494,6 @@
             this.pointsSettingsTab.TabIndex = 3;
             this.pointsSettingsTab.Text = "Points";
             // 
-            // loggingSettingsTab
-            // 
-            this.loggingSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.loggingSettingsTab.Controls.Add(this.label4);
-            this.loggingSettingsTab.Location = new System.Drawing.Point(4, 40);
-            this.loggingSettingsTab.Name = "loggingSettingsTab";
-            this.loggingSettingsTab.Size = new System.Drawing.Size(413, 335);
-            this.loggingSettingsTab.TabIndex = 4;
-            this.loggingSettingsTab.Text = "Logging";
-            // 
-            // notificationsSettingsTab
-            // 
-            this.notificationsSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.notificationsSettingsTab.Controls.Add(this.label5);
-            this.notificationsSettingsTab.Location = new System.Drawing.Point(4, 40);
-            this.notificationsSettingsTab.Name = "notificationsSettingsTab";
-            this.notificationsSettingsTab.Size = new System.Drawing.Size(413, 335);
-            this.notificationsSettingsTab.TabIndex = 5;
-            this.notificationsSettingsTab.Text = "Notifications";
-            // 
-            // pollsSettingsTab
-            // 
-            this.pollsSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.pollsSettingsTab.Controls.Add(this.label6);
-            this.pollsSettingsTab.Location = new System.Drawing.Point(4, 40);
-            this.pollsSettingsTab.Name = "pollsSettingsTab";
-            this.pollsSettingsTab.Size = new System.Drawing.Size(413, 335);
-            this.pollsSettingsTab.TabIndex = 6;
-            this.pollsSettingsTab.Text = "Polls";
-            // 
-            // campaignsSettingsTab
-            // 
-            this.campaignsSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.campaignsSettingsTab.Controls.Add(this.label7);
-            this.campaignsSettingsTab.Location = new System.Drawing.Point(4, 40);
-            this.campaignsSettingsTab.Name = "campaignsSettingsTab";
-            this.campaignsSettingsTab.Size = new System.Drawing.Size(413, 335);
-            this.campaignsSettingsTab.TabIndex = 7;
-            this.campaignsSettingsTab.Text = "Campaigns";
-            // 
-            // bookmarksSettingsTab
-            // 
-            this.bookmarksSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.bookmarksSettingsTab.Controls.Add(this.label8);
-            this.bookmarksSettingsTab.Location = new System.Drawing.Point(4, 40);
-            this.bookmarksSettingsTab.Name = "bookmarksSettingsTab";
-            this.bookmarksSettingsTab.Size = new System.Drawing.Size(413, 335);
-            this.bookmarksSettingsTab.TabIndex = 8;
-            this.bookmarksSettingsTab.Text = "Bookmarks";
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -545,6 +502,16 @@
             this.label3.Size = new System.Drawing.Size(79, 13);
             this.label3.TabIndex = 8;
             this.label3.Text = "Coming Soon!";
+            // 
+            // loggingSettingsTab
+            // 
+            this.loggingSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.loggingSettingsTab.Controls.Add(this.label4);
+            this.loggingSettingsTab.Location = new System.Drawing.Point(4, 40);
+            this.loggingSettingsTab.Name = "loggingSettingsTab";
+            this.loggingSettingsTab.Size = new System.Drawing.Size(413, 315);
+            this.loggingSettingsTab.TabIndex = 4;
+            this.loggingSettingsTab.Text = "Logging";
             // 
             // label4
             // 
@@ -555,6 +522,16 @@
             this.label4.TabIndex = 9;
             this.label4.Text = "Coming Soon!";
             // 
+            // notificationsSettingsTab
+            // 
+            this.notificationsSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.notificationsSettingsTab.Controls.Add(this.label5);
+            this.notificationsSettingsTab.Location = new System.Drawing.Point(4, 40);
+            this.notificationsSettingsTab.Name = "notificationsSettingsTab";
+            this.notificationsSettingsTab.Size = new System.Drawing.Size(413, 315);
+            this.notificationsSettingsTab.TabIndex = 5;
+            this.notificationsSettingsTab.Text = "Notifications";
+            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -563,6 +540,16 @@
             this.label5.Size = new System.Drawing.Size(79, 13);
             this.label5.TabIndex = 9;
             this.label5.Text = "Coming Soon!";
+            // 
+            // pollsSettingsTab
+            // 
+            this.pollsSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.pollsSettingsTab.Controls.Add(this.label6);
+            this.pollsSettingsTab.Location = new System.Drawing.Point(4, 40);
+            this.pollsSettingsTab.Name = "pollsSettingsTab";
+            this.pollsSettingsTab.Size = new System.Drawing.Size(413, 315);
+            this.pollsSettingsTab.TabIndex = 6;
+            this.pollsSettingsTab.Text = "Polls";
             // 
             // label6
             // 
@@ -573,6 +560,16 @@
             this.label6.TabIndex = 9;
             this.label6.Text = "Coming Soon!";
             // 
+            // campaignsSettingsTab
+            // 
+            this.campaignsSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.campaignsSettingsTab.Controls.Add(this.label7);
+            this.campaignsSettingsTab.Location = new System.Drawing.Point(4, 40);
+            this.campaignsSettingsTab.Name = "campaignsSettingsTab";
+            this.campaignsSettingsTab.Size = new System.Drawing.Size(413, 315);
+            this.campaignsSettingsTab.TabIndex = 7;
+            this.campaignsSettingsTab.Text = "Campaigns";
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -582,15 +579,102 @@
             this.label7.TabIndex = 9;
             this.label7.Text = "Coming Soon!";
             // 
+            // bookmarksSettingsTab
+            // 
+            this.bookmarksSettingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.bookmarksSettingsTab.Controls.Add(this.label8);
+            this.bookmarksSettingsTab.Controls.Add(this.hotkeyComboBox);
+            this.bookmarksSettingsTab.Controls.Add(this.hotkeyLabelRight);
+            this.bookmarksSettingsTab.Controls.Add(this.shiftCheckbox);
+            this.bookmarksSettingsTab.Controls.Add(this.altCheckbox);
+            this.bookmarksSettingsTab.Controls.Add(this.controlCheckbox);
+            this.bookmarksSettingsTab.Controls.Add(this.hotkeyLabelLeft);
+            this.bookmarksSettingsTab.Controls.Add(this.useBookmarkHotkeyCheckbox);
+            this.bookmarksSettingsTab.Location = new System.Drawing.Point(4, 40);
+            this.bookmarksSettingsTab.Name = "bookmarksSettingsTab";
+            this.bookmarksSettingsTab.Size = new System.Drawing.Size(413, 315);
+            this.bookmarksSettingsTab.TabIndex = 8;
+            this.bookmarksSettingsTab.Text = "Bookmarks";
+            // 
+            // hotkeyComboBox
+            // 
+            this.hotkeyComboBox.FormattingEnabled = true;
+            this.hotkeyComboBox.Location = new System.Drawing.Point(304, 23);
+            this.hotkeyComboBox.Name = "hotkeyComboBox";
+            this.hotkeyComboBox.Size = new System.Drawing.Size(101, 21);
+            this.hotkeyComboBox.TabIndex = 16;
+            this.hotkeyComboBox.SelectedIndexChanged += new System.EventHandler(this.UpdateHotkey);
+            // 
+            // hotkeyLabelRight
+            // 
+            this.hotkeyLabelRight.AutoSize = true;
+            this.hotkeyLabelRight.Location = new System.Drawing.Point(249, 26);
+            this.hotkeyLabelRight.Name = "hotkeyLabelRight";
+            this.hotkeyLabelRight.Size = new System.Drawing.Size(49, 13);
+            this.hotkeyLabelRight.TabIndex = 15;
+            this.hotkeyLabelRight.Text = "Hotkey:";
+            // 
+            // shiftCheckbox
+            // 
+            this.shiftCheckbox.AutoSize = true;
+            this.shiftCheckbox.Location = new System.Drawing.Point(187, 25);
+            this.shiftCheckbox.Name = "shiftCheckbox";
+            this.shiftCheckbox.Size = new System.Drawing.Size(56, 17);
+            this.shiftCheckbox.TabIndex = 14;
+            this.shiftCheckbox.Text = "SHIFT";
+            this.shiftCheckbox.UseVisualStyleBackColor = true;
+            this.shiftCheckbox.CheckedChanged += new System.EventHandler(this.UpdateHotkey);
+            // 
+            // altCheckbox
+            // 
+            this.altCheckbox.AutoSize = true;
+            this.altCheckbox.Location = new System.Drawing.Point(137, 25);
+            this.altCheckbox.Name = "altCheckbox";
+            this.altCheckbox.Size = new System.Drawing.Size(44, 17);
+            this.altCheckbox.TabIndex = 13;
+            this.altCheckbox.Text = "ALT";
+            this.altCheckbox.UseVisualStyleBackColor = true;
+            this.altCheckbox.CheckedChanged += new System.EventHandler(this.UpdateHotkey);
+            // 
+            // controlCheckbox
+            // 
+            this.controlCheckbox.AutoSize = true;
+            this.controlCheckbox.Location = new System.Drawing.Point(81, 25);
+            this.controlCheckbox.Name = "controlCheckbox";
+            this.controlCheckbox.Size = new System.Drawing.Size(50, 17);
+            this.controlCheckbox.TabIndex = 12;
+            this.controlCheckbox.Text = "CTRL";
+            this.controlCheckbox.UseVisualStyleBackColor = true;
+            this.controlCheckbox.CheckedChanged += new System.EventHandler(this.UpdateHotkey);
+            // 
+            // hotkeyLabelLeft
+            // 
+            this.hotkeyLabelLeft.AutoSize = true;
+            this.hotkeyLabelLeft.Location = new System.Drawing.Point(8, 26);
+            this.hotkeyLabelLeft.Name = "hotkeyLabelLeft";
+            this.hotkeyLabelLeft.Size = new System.Drawing.Size(67, 13);
+            this.hotkeyLabelLeft.TabIndex = 11;
+            this.hotkeyLabelLeft.Text = "Modifiers:";
+            // 
+            // useBookmarkHotkeyCheckbox
+            // 
+            this.useBookmarkHotkeyCheckbox.AutoSize = true;
+            this.useBookmarkHotkeyCheckbox.Location = new System.Drawing.Point(6, 6);
+            this.useBookmarkHotkeyCheckbox.Name = "useBookmarkHotkeyCheckbox";
+            this.useBookmarkHotkeyCheckbox.Size = new System.Drawing.Size(218, 17);
+            this.useBookmarkHotkeyCheckbox.TabIndex = 10;
+            this.useBookmarkHotkeyCheckbox.Text = "Use Hotkey to Trigger a Bookmark";
+            this.useBookmarkHotkeyCheckbox.UseVisualStyleBackColor = true;
+            this.useBookmarkHotkeyCheckbox.CheckedChanged += new System.EventHandler(this.UseBookmarkHotkeyCheckbox_CheckedChanged);
+            // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 6);
+            this.label8.Location = new System.Drawing.Point(8, 284);
             this.label8.Name = "label8";
-            this.label8.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label8.Size = new System.Drawing.Size(79, 13);
-            this.label8.TabIndex = 9;
-            this.label8.Text = "Coming Soon!";
+            this.label8.Size = new System.Drawing.Size(337, 26);
+            this.label8.TabIndex = 17;
+            this.label8.Text = "If this hotkey isn\'t working, try running MilkCanvas as\r\nAdministrator.";
             // 
             // Canvas
             // 
@@ -675,6 +759,13 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.CheckBox useBookmarkHotkeyCheckbox;
+        private System.Windows.Forms.Label hotkeyLabelLeft;
+        private System.Windows.Forms.CheckBox shiftCheckbox;
+        private System.Windows.Forms.CheckBox altCheckbox;
+        private System.Windows.Forms.CheckBox controlCheckbox;
+        private System.Windows.Forms.ComboBox hotkeyComboBox;
+        private System.Windows.Forms.Label hotkeyLabelRight;
         private System.Windows.Forms.Label label8;
     }
 }
