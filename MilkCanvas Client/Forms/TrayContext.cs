@@ -123,6 +123,8 @@
             }
 
             this.Canvas = new Canvas(this);
+
+            HotKeyManager.HotKeyPressed += HotKeyManager_HotKeyPressed;
         }
 
         public MChatCommand FindChatCommand(string identifier)
@@ -343,9 +345,10 @@
                 Visible = true,
             };
 
+            // TODO: Auto update system!
+
             this.IconMenu.MenuItems.Add("Canvas", this.TrayIcon_Canvas);
             this.IconMenu.MenuItems.Add("-");
-            this.IconMenu.MenuItems.Add("Check For Updates", this.TrayIcon_CheckForUpdates);
             this.IconMenu.MenuItems.Add("About", this.TrayIcon_About);
             this.IconMenu.MenuItems.Add("-");
             this.IconMenu.MenuItems.Add("Exit", this.TrayIcon_Exit);
@@ -393,18 +396,50 @@
 
         private void SendTaggableMessage(string message, OnChatCommandReceivedArgs args)
         {
-            var commandArgs = args.Command.ArgumentsAsList;
-            var mention = commandArgs.Count > 0 ? commandArgs[commandArgs.Count - 1] : string.Empty;
-            if ((args.Command.ChatMessage.IsModerator || args.Command.ChatMessage.IsBroadcaster) && Settings.ModsCanPseudoTag && mention.StartsWith("@"))
+            if (args != null)
             {
-                message = $"{mention} {message}";
-            }
-            else if (Settings.TagUsers)
-            {
-                message = $"@{args.Command.ChatMessage.DisplayName} {message}";
+                var commandArgs = args.Command.ArgumentsAsList;
+                var mention = commandArgs.Count > 0 ? commandArgs[commandArgs.Count - 1] : string.Empty;
+                if ((args.Command.ChatMessage.IsModerator || args.Command.ChatMessage.IsBroadcaster) && Settings.ModsCanPseudoTag && mention.StartsWith("@"))
+                {
+                    message = $"{mention} {message}";
+                }
+                else if (Settings.TagUsers)
+                {
+                    message = $"@{args.Command.ChatMessage.DisplayName} {message}";
+                }
             }
 
             this.ChatClient.SendMessage(args.Command.ChatMessage.Channel, message);
+        }
+
+        private void CreateBookmark(string username, OnChatCommandReceivedArgs e)
+        {
+            var id = this.API.GetUserIDAsync(username).GetAwaiter().GetResult();
+            var uptime = this.API.GetUptimeAsync(id).GetAwaiter().GetResult();
+
+            if (uptime != null)
+            {
+                // The description always starts with the first argument.
+                var description = e.Command.ArgumentsAsString;
+
+                var sb = new StringBuilder();
+                sb.AppendLine($"Description: {description}");
+                sb.AppendLine($"Bookmark Date/Time: {DateTimeOffset.Now}");
+                sb.AppendLine($"Uptime: {uptime?.ToString().Split('.')[0]}");
+
+                if (!Directory.Exists("./Bookmarks/"))
+                {
+                    Directory.CreateDirectory("./Bookmarks/");
+                }
+
+                Settings.SaveFileText($"./Bookmarks/{description.Substring(0, 32)}", sb.ToString());
+                this.TimeoutCommand("bookmark", 15);
+            }
+            else
+            {
+                this.SendTaggableMessage("Stream is offline, no bookmark made.", e);
+            }
         }
 
         private string ReplaceEmotes(string message)
@@ -444,6 +479,11 @@
             }
 
             return message;
+        }
+
+        private void HotKeyManager_HotKeyPressed(object sender, HotKeyEventArgs e)
+        {
+            this.CreateBookmark(this.Client.ConnectionCredentials.TwitchUsername, null);
         }
 
         private async void Uptime_ChatCommand(object sender, OnChatCommandReceivedArgs e)
@@ -631,35 +671,9 @@
             }
         }
 
-        private async void Bookmark_ChatCommand(object sender, OnChatCommandReceivedArgs e)
+        private void Bookmark_ChatCommand(object sender, OnChatCommandReceivedArgs e)
         {
-            // TODO: Implement hotkey for saving bookmarks.
-
-            var id = await this.API.GetUserIDAsync(e.Command.ChatMessage.Channel);
-            var uptime = await this.API.GetUptimeAsync(id);
-
-            if (uptime != null)
-            {
-                // The description always starts with the first argument.
-                var description = e.Command.ArgumentsAsString;
-
-                var sb = new StringBuilder();
-                sb.AppendLine($"Description: {description}");
-                sb.AppendLine($"Bookmark Date/Time: {DateTimeOffset.Now}");
-                sb.AppendLine($"Uptime: {uptime?.ToString().Split('.')[0]}");
-
-                if (!Directory.Exists("./Bookmarks/"))
-                {
-                    Directory.CreateDirectory("./Bookmarks/");
-                }
-
-                Settings.SaveFileText($"./Bookmarks/{description.Substring(0, 32)}", sb.ToString());
-                this.TimeoutCommand("bookmark", 15);
-            }
-            else
-            {
-                this.SendTaggableMessage("Stream is offline, no bookmark made.", e);
-            }
+            this.CreateBookmark(e.Command.ChatMessage.Channel, e);
         }
 
         private void Login_TwitchAuthenticated(object sender, TwitchAuthenticatedEventArgs e)
