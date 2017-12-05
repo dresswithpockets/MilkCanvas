@@ -46,6 +46,10 @@
         private const string modsSetAliasesKey = "ModsSetAliases";
         private const string modsRemoveAliasesKey = "ModsRemoveAliases";
 
+        private const string useBookmarkHotkeyKey = "UseBookmarkHotkey";
+        private const string bookmarkModifiersKey = "BookmarkModifiers";
+        private const string bookmarkHotkeyKey = "BookmarkHotkey";
+
         private static readonly Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
 
         private static readonly Lazy<ChatCommand[]> chatCommands = new Lazy<ChatCommand[]>(() => JsonConvert.DeserializeObject<ChatCommand[]>(ReadFileText(chatCommandsPath), new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects }));
@@ -112,6 +116,12 @@
 
         public static bool ModsRemoveAliases => GetBool(modsRemoveAliasesKey);
 
+        public static bool UseBookmarkHotkey => GetBool(useBookmarkHotkeyKey);
+
+        public static int BookmarkModifiers => GetInt(bookmarkModifiersKey);
+
+        public static int BookmarkHotkey => GetInt(bookmarkHotkeyKey);
+
         public static KeyValueConfigurationElement GetSetting(string key) => config.AppSettings.Settings[key];
 
         public static bool GetBool(string key)
@@ -171,7 +181,10 @@
             bool? modsSetChatCommands = null,
             bool? modsRemoveChatCommands = null,
             bool? modsSetAliases = null,
-            bool? modsRemoveAliases = null)
+            bool? modsRemoveAliases = null,
+            bool? useBookmarkHotkey = null,
+            int? bookmarkModifiers = null,
+            int? bookmarkHotkey = null)
         {
 
             // launch options
@@ -296,6 +309,22 @@
             if (modsRemoveAliases != null)
             {
                 UpdateSetting(modsRemoveAliasesKey, modsRemoveAliases.Value.ToString());
+            }
+
+            // bookmarks
+            if (useBookmarkHotkey != null)
+            {
+                UpdateSetting(useBookmarkHotkeyKey, useBookmarkHotkey.Value.ToString());
+            }
+
+            if (bookmarkModifiers != null)
+            {
+                UpdateSetting(bookmarkModifiersKey, bookmarkModifiers.Value.ToString());
+            }
+
+            if (bookmarkHotkey != null)
+            {
+                UpdateSetting(bookmarkHotkeyKey, bookmarkHotkey.Value.ToString());
             }
 
             config.Save();
