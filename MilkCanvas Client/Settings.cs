@@ -375,12 +375,20 @@
             }
         }
 
-        public static void SaveFileText(string path, string text)
+        public static void SaveFileText(string path, string text, bool block = false)
         {
+            // if we want to block, then block until the file is ready to be opened.
+            if (block)
+            {
+                while (!FileReady(path))
+                {
+                }
+            }
+
             using (var file = File.Open(path, FileMode.Create, FileAccess.Write, FileShare.None))
             using (var writer = new StreamWriter(file))
             {
-                writer.WriteAsync(text);
+                writer.Write(text);
             }
         }
 
