@@ -10,6 +10,7 @@
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using System.Windows.Forms;
+    using System.Xml.Linq;
     using EdgeJs;
     using MilkCanvas;
     using MilkCanvas.Enums;
@@ -349,6 +350,7 @@
 
             this.IconMenu.MenuItems.Add("Canvas", this.TrayIcon_Canvas);
             this.IconMenu.MenuItems.Add("-");
+            this.IconMenu.MenuItems.Add("Import Component Commands", this.TrayIcon_ImportComponentCommands);
             this.IconMenu.MenuItems.Add("About", this.TrayIcon_About);
             this.IconMenu.MenuItems.Add("-");
             this.IconMenu.MenuItems.Add("Exit", this.TrayIcon_Exit);
@@ -877,9 +879,26 @@
             this.About.Show();
         }
 
-        private void TrayIcon_CheckForUpdates(object sender, EventArgs e)
+        private void TrayIcon_ImportComponentCommands(object sender, EventArgs e)
         {
-            // TODO: Implement update system, preferrably NAppUpdate
+            using (var fileBrowser = new OpenFileDialog())
+            {
+                fileBrowser.CheckFileExists = true;
+                fileBrowser.CheckPathExists = true;
+                fileBrowser.Multiselect = false;
+                fileBrowser.Filter = "Component Commands (ComponentSettings.xml)|ComponentSettings.xml";
+
+                var result = fileBrowser.ShowDialog(this);
+                if (result == DialogResult.OK)
+                {
+                    var commands = from command in XDocument.Load(fileBrowser.FileName).Descendants("Command")
+                                   select new MChatCommand((string)command.Element("Name"), (string)command.Element("Message"));
+
+                    this.chatCommands.AddRange(commands);
+                    Settings.SaveCommands(this.chatCommands);
+                    MessageBox.Show(this, "Finished importing chat commands.\nType !commands in chat to see what was imported.", "Finished", MessageBoxButtons.OK);
+                }
+            }
         }
 
         private void TrayIcon_Canvas(object sender, EventArgs e)
