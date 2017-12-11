@@ -412,7 +412,7 @@
                 }
             }
 
-            this.ChatClient.SendMessage(args.Command.ChatMessage.Channel, message);
+            this.ChatClient.SendMessage(args?.Command.ChatMessage.Channel ?? this.ChatClient.JoinedChannels.First().Channel, message);
         }
 
         private void CreateBookmark(string username, OnChatCommandReceivedArgs e)
