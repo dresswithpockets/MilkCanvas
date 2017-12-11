@@ -78,7 +78,7 @@
         /// <returns>True if <paramref name="hWnd"/> represents any of the controls in this control. False otherwise.</returns>
         public bool VerifyHandle(IntPtr hWnd)
         {
-            var control = FromHandle(hWnd).GetHashCode();
+            var control = FromHandle(hWnd)?.GetHashCode();
 
             return this.canvasLabel.GetHashCode().Equals(control) ||
                 this.textLabel.GetHashCode().Equals(control) ||
