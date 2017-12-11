@@ -335,7 +335,7 @@
             }
 
             int? key = null;
-            if (Enum.TryParse<KeyModifiers>(this.hotkeyComboBox.SelectedText, out var value))
+            if (Enum.TryParse<Keys>(this.hotkeyComboBox.SelectedItem as string, true, out var value))
             {
                 key = (int)value;
             }
