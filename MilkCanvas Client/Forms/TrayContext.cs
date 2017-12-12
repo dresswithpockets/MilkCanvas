@@ -448,39 +448,55 @@
         {
             var rand = new Random();
 
-            message.Replace("{emote}", this.emotes[rand.Next(this.emotes.Count)].Code);
-
-            var emotes = new Dictionary<int, string>();
-            var matchEmotes = new Regex(emotePattern).Match(message);
-            foreach (Group group in matchEmotes.Groups)
+            string RandEmote()
             {
-                if (group.Success && int.TryParse(group.Value, out var value))
+                // if they don't have any emotes then this would throw an out-of-range exception
+                // unless we check for it and replace it with an empty string.
+                return this.emotes.Count == 0 ? string.Empty : this.emotes[rand.Next(this.emotes.Count)].Code;
+            }
+
+            message = message.Replace("{emote}", RandEmote());
+
+            var emotesUsed = new Dictionary<int, string>();
+            foreach (Match match in new Regex(emotePattern).Matches(message))
+            {
+                if (!match.Success || match.Groups.Count < 2)
                 {
-                    // we want to reuse numbers. i.e if the channel has 15 emotes but the user has
-                    // {emote20} then thats equivelent to {emote5}.
-                    value %= this.emotes.Count;
+                    continue;
+                }
+
+                if (int.TryParse(match.Groups[1].Value, out var value))
+                {
+                    // don't want to divide by zero in case there are no emotes to choose from.
+                    if (this.emotes.Count != 0)
+                    {
+                        // we want to reuse numbers. i.e if the channel has 15 emotes but the user has
+                        // {emote20} then thats equivelent to {emote5}.
+                        value %= this.emotes.Count;
+                    }
 
                     // reuse tags that already have emotes. i.e if we've seen {emote5} before then don't
                     // allocate a new emote for it and just replace it with what we've used before.
-                    string emote = string.Empty;
-                    if (!emotes.TryGetValue(value, out emote))
+                    var emote = string.Empty;
+                    if (!emotesUsed.TryGetValue(value, out emote))
                     {
                         // guarantee that the newly allocated emote is unique in the dictionary
                         // so that we're not duplicating the emote in the message.
-                        while (!emotes.ContainsValue(emote))
+                        do
                         {
-                            emote = this.emotes[rand.Next(this.emotes.Count)].Code;
+                            emote = RandEmote();
                         }
+                        while (emote != string.Empty && emotesUsed.ContainsValue(emote));
 
-                        emotes.Add(value, emote);
+                        emotesUsed.Add(value, emote);
                     }
 
                     // finally, replace the instance of {emote#} where # is the value with the allocated emote.
-                    message.Replace($"{{emote{value}}}", emote);
+                    message = message.Replace($"{{emote{value}}}", emote);
                 }
             }
 
-            return message;
+            return message.Trim();
         }
 
         private void HotKeyManager_HotKeyPressed(object sender, HotKeyEventArgs e)
