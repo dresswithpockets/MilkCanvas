@@ -125,7 +125,7 @@
 
             this.Canvas = new Canvas(this);
 
-            HotKeyManager.HotKeyPressed += HotKeyManager_HotKeyPressed;
+            HotKeyManager.HotKeyPressed += this.HotKeyManager_HotKeyPressed;
         }
 
         public MChatCommand FindChatCommand(string identifier)
