@@ -718,9 +718,9 @@
                 var message = Settings.ResubMessage;
 
                 var tier = "Twitch Prime";
-                if (!e.ReSubscriber.IsTwitchPrime)
+                if (!(e.ReSubscriber?.IsTwitchPrime ?? false))
                 {
-                    switch (e.ReSubscriber.SubscriptionPlan)
+                    switch (e.ReSubscriber?.SubscriptionPlan)
                     {
                         case SubscriptionPlan.Tier1:
                             tier = "$4.99";
@@ -754,9 +754,9 @@
                 var message = Settings.SubMessage;
 
                 var tier = "Twitch Prime";
-                if (!e.Subscriber.IsTwitchPrime)
+                if (!(e.Subscriber?.IsTwitchPrime ?? false))
                 {
-                    switch (e.Subscriber.SubscriptionPlan)
+                    switch (e.Subscriber?.SubscriptionPlan)
                     {
                         case SubscriptionPlan.Tier1:
                             tier = "$4.99";
