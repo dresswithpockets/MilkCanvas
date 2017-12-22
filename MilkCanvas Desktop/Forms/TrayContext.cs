@@ -460,7 +460,7 @@
             {
                 // if they don't have any emotes then this would throw an out-of-range exception
                 // unless we check for it and replace it with an empty string.
-                return this.emotes.Count == 0 ? string.Empty : this.emotes[rand.Next(this.emotes.Count)].Code;
+                return this.emotes.Count == 0 ? string.Empty : this.emotes[rand.Next(this.emotes.Count)];
             }
 
             message = message.Replace("{emote}", RandEmote());
