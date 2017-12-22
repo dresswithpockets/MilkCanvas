@@ -129,17 +129,17 @@
 
         public MChatCommand FindChatCommand(string identifier)
         {
-            return this.chatCommands.FirstOrDefault(c => c.Identifier.Equals(identifier));
+            return this.chatCommands.FirstOrDefault(c => c.Identifier.ToLower().Equals(identifier.ToLower()));
         }
 
         public Command FindBuiltinCommand(string identifier)
         {
-            return this.builtinCommands.FirstOrDefault(c => c.Identifier.Equals(identifier));
+            return this.builtinCommands.FirstOrDefault(c => c.Identifier.ToLower().Equals(identifier.ToLower()));
         }
 
         public Alias FindAlias(string alias)
         {
-            return this.aliases.FirstOrDefault(a => a.Alternate.Equals(alias));
+            return this.aliases.FirstOrDefault(a => a.Alternate.ToLower().Equals(alias.ToLower()));
         }
 
         public bool TryChatCommandFromAlias(Alias alias, out MChatCommand chatCommand)
@@ -156,7 +156,7 @@
 
         public Permission FindPermissionFromCommand(string command)
         {
-            return this.permissions.FirstOrDefault(p => p.Command.Equals(command));
+            return this.permissions.FirstOrDefault(p => p.Command.ToLower().Equals(command.ToLower()));
         }
 
         public Permission FindPermissionFromAlias(string aliasIdentifier)
@@ -551,7 +551,7 @@
             {
                 var action = args[0];
                 var alteredCommand = args[1];
-                switch (action)
+                switch (action.ToLower())
                 {
                     case "set":
 
@@ -608,7 +608,7 @@
             {
                 var action = args[0];
                 var alteredAlias = args[1];
-                switch (action)
+                switch (action.ToLower())
                 {
                     case "set":
 
@@ -665,7 +665,7 @@
             {
                 var permCommand = args[0];
                 UserGroup group;
-                switch (args[1])
+                switch (args[1].ToLower())
                 {
                     case "host":
                         group = UserGroup.Broadcaster;
