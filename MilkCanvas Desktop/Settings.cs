@@ -18,6 +18,8 @@
         private const string chatCommandsPath = "commands.json";
         private const string permissionsPath = "permissions.json";
         private const string aliasesPath = "aliases.json";
+        private const string emotesPath = "emotes.json";
+
         private const string launchedKey = "Launched";
         private const string stateKey = "State";
         private const string twitchSubjectKey = "TwitchSubject";
@@ -55,6 +57,7 @@
         private static readonly Lazy<ChatCommand[]> chatCommands = new Lazy<ChatCommand[]>(() => JsonConvert.DeserializeObject<ChatCommand[]>(ReadFileText(chatCommandsPath), new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects }));
         private static readonly Lazy<Permission[]> permissions = new Lazy<Permission[]>(() => JsonConvert.DeserializeObject<Permission[]>(ReadFileText(permissionsPath)));
         private static readonly Lazy<Alias[]> aliases = new Lazy<Alias[]>(() => JsonConvert.DeserializeObject<Alias[]>(ReadFileText(aliasesPath)));
+        private static readonly Lazy<string[]> emotes = new Lazy<string[]>(() => JsonConvert.DeserializeObject<string[]>(ReadFileText(emotesPath)));
 
         public static ChatCommand[] ChatCommands => chatCommands.Value;
 
@@ -62,11 +65,15 @@
 
         public static Alias[] Aliases => aliases.Value;
 
+        public static string[] Emotes => emotes.Value;
+
         public static bool ChatCommandsExist => File.Exists(chatCommandsPath);
 
         public static bool PermissionsExist => File.Exists(permissionsPath);
 
         public static bool AliasesExists => File.Exists(aliasesPath);
+
+        public static bool EmotesExists => File.Exists(emotesPath);
 
         public static bool FirstLaunch => GetSetting(launchedKey) == null;
 
@@ -343,6 +350,11 @@
         public static void SaveAliases(List<Alias> aliases)
         {
             SaveFileText(aliasesPath, JsonConvert.SerializeObject(aliases));
+        }
+
+        public static void SaveEmotes(List<string> emotes)
+        {
+            SaveFileText(emotesPath, JsonConvert.SerializeObject(emotes));
         }
 
         public static void UpdateIf(bool assertion, string key, string value)
