@@ -40,7 +40,7 @@
         private List<Alias> aliases;
         private List<Permission> permissions;
         private List<CommandTimeout> timeouts;
-        private List<SubscriberEmote> emotes;
+        private List<string> emotes;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TrayContext"/> class.
@@ -321,8 +321,16 @@
                 this.aliases = new List<Alias>();
             }
 
+            if (Settings.EmotesExists)
+            {
+                this.emotes = new List<string>(Settings.Emotes);
+            }
+            else
+            {
+                this.emotes = new List<string>();
+            }
+
             this.timeouts = new List<CommandTimeout>();
-            this.emotes = new List<SubscriberEmote>();
 
             this.SetupBuiltinCommands();
 
