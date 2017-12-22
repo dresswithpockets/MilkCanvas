@@ -91,7 +91,6 @@
 
             this.Credentials = new ConnectionCredentials(user.Name, access);
             this.Client = new TwitchClient(this.Credentials, channel: user.Name);
-            this.Client.OnJoinedChannel += this.Client_OnJoinedChannel;
             this.Client.OnNewSubscriber += this.Client_OnNewSubscriber;
             this.Client.OnReSubscriber += this.Client_OnReSubscriber;
             this.Client.OnChatCommandReceived += this.Client_OnChatCommandReceived;
@@ -708,19 +707,6 @@
             {
                 this.Close();
             }
-        }
-
-        private void Client_OnJoinedChannel(object sender, OnJoinedChannelArgs e)
-        {
-            var subscriptions = JsonConvert.DeserializeObject<Dictionary<string, SubscriberEmotes>>(Utility.Get("https://twitchemotes.com/api_cache/v3/subscriber.json"));
-
-            if (subscriptions.TryGetValue(e.Channel, out var subEmotes))
-            {
-                this.emotes.AddRange(subEmotes.Emotes);
-            }
-
-            // please for the love of god GC clean this bit of memory.
-            subscriptions = null;
         }
 
         private void Client_OnReSubscriber(object sender, OnReSubscriberArgs e)
