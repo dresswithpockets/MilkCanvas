@@ -401,6 +401,7 @@
             this.builtinCommands.Add(new Command("alias", "Creates or removes aliases for existing commands.", this.Alias_ChatCommand));
             this.builtinCommands.Add(new Command("permission", "Changes the permissions required to run a command.", this.Permission_ChatCommand));
             this.builtinCommands.Add(new Command("bookmark", "Flags the current timestamp in the stream and saves it.", this.Bookmark_ChatCommand));
+            this.builtinCommands.Add(new Command("emotes", "Manages the emotes that the bot can utilize in messages.", this.Emote_ChatCommand));
         }
 
         private void SendTaggableMessage(string message, OnChatCommandReceivedArgs args)
@@ -699,6 +700,73 @@
         private void Bookmark_ChatCommand(object sender, OnChatCommandReceivedArgs e)
         {
             this.CreateBookmark(e.Command.ChatMessage.Channel, e);
+        }
+
+        private void Emote_ChatCommand(object sender, OnChatCommandReceivedArgs e)
+        {
+            // !emote {add|remove|list} {if arg[0] = add|remove: command}
+            var args = e.Command.ArgumentsAsList;
+
+            if (args.Count >= 1)
+            {
+                var messageBuilder = new StringBuilder();
+                var action = args[0];
+                switch (action.ToLower())
+                {
+                    case "add":
+
+                        if (e.Command.ChatMessage.EmoteSet.Emotes.Count > 0)
+                        {
+                            var emoteNames = from emote in e.Command.ChatMessage.EmoteSet.Emotes
+                                             select emote.Name;
+
+                            foreach (var emote in emoteNames)
+                            {
+                                if (!this.emotes.Contains(emote))
+                                {
+                                    this.emotes.Add(emote);
+                                }
+                            }
+
+                            Settings.SaveEmotes(this.emotes);
+                            this.ChatClient.SendMessage(e.Command.ChatMessage.Channel, $"Added emotes: {string.Join(" ", emoteNames)}");
+                        }
+
+                        break;
+                    case "remove":
+
+                        if (e.Command.ChatMessage.EmoteSet.Emotes.Count > 0)
+                        {
+                            var emoteNames = new List<string>();
+
+                            foreach (var emote in e.Command.ArgumentsAsList)
+                            {
+                                if (this.emotes.Contains(emote))
+                                {
+                                    this.emotes.Remove(emote);
+                                    emoteNames.Add(emote);
+                                }
+                            }
+
+                            Settings.SaveEmotes(this.emotes);
+                            this.ChatClient.SendMessage(e.Command.ChatMessage.Channel, $"Removed emotes: {string.Join(" ", emoteNames)}");
+                        }
+
+                        break;
+                    case "list":
+
+                        if (this.emotes.Count > 0)
+                        {
+                            this.ChatClient.SendMessage(e.Command.ChatMessage.Channel, $"Emotes: {string.Join(" ", this.emotes)}");
+                        }
+                        else
+                        {
+                            this.ChatClient.SendMessage(e.Command.ChatMessage.Channel, "There are no emotes set!");
+                        }
+
+                        break;
+                }
+            }
         }
 
         private void Login_TwitchAuthenticated(object sender, TwitchAuthenticatedEventArgs e)
