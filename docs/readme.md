@@ -41,6 +41,7 @@ There are a few builtin commands in the current version of MilkCanvas. Click eac
 - [!alias](#alias) 
 - [!permission](#permission) 
 - [!bookmark](#bookmark) 
+- [!emotes](#emotes)
  
 # Canvas 
 
@@ -222,7 +223,7 @@ There are a few builtin commands in the current version of MilkCanvas. Click eac
  
 ## Bookmark 
  
-> !bookmark - Flags the current timestamp in the stream and saves it. 
+> Flags the current timestamp in the stream and saves it. 
 >
 > ``` 
 > Usage: !bookmark (description) 
@@ -235,3 +236,23 @@ There are a few builtin commands in the current version of MilkCanvas. Click eac
 > - The Uptime since the stream started. This can be used to deduce the stream date if the stream started on a different day.
 >
 > Bookmarks cannot be made within 15 seconds of eachother; bookmarks made by the broadcaster ignore this delay. Moderators are not ignored unless the are [exempted.](#permissions)
+
+## Emotes
+
+> Manages the emotes that the bot can utilize in chat. When adding/removing it will search for *all* emotes in the command.
+> 
+> ```
+> Usage: !emotes [add|remove|list] [add|remove:emotes]
+> 
+> Adding the emotes bannyFat, bannyP, bannyMouse, bannyXD:
+> !emotes add bannyFat bannyP bannyMouse KappaHD monkaS
+> 
+> You can also put normal words in the message, and it will ignore those:
+> !emotes add bannyT hello world! bannyXD
+>
+> Removing emotes
+> !emotes remove bannyFat bannyMouse monkaS
+> 
+> Listing currently registered emotes:
+> !emotes list
+> ```
