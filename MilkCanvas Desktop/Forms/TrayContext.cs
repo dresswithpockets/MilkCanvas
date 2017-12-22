@@ -425,30 +425,38 @@
 
         private void CreateBookmark(string username, OnChatCommandReceivedArgs e)
         {
-            var id = this.API.GetUserIDAsync(username).GetAwaiter().GetResult();
-            var uptime = this.API.GetUptimeAsync(id).GetAwaiter().GetResult();
-
-            if (uptime != null)
+            try
             {
-                // The description always starts with the first argument.
-                var description = e.Command.ArgumentsAsString;
+                var id = this.API.GetUserIDAsync(username).GetAwaiter().GetResult();
+                var uptime = this.API.GetUptimeAsync(id).GetAwaiter().GetResult();
 
-                var sb = new StringBuilder();
-                sb.AppendLine($"Description: {description}");
-                sb.AppendLine($"Bookmark Date/Time: {DateTimeOffset.Now}");
-                sb.AppendLine($"Uptime: {uptime?.ToString().Split('.')[0]}");
-
-                if (!Directory.Exists("./Bookmarks/"))
+                if (uptime != null)
                 {
-                    Directory.CreateDirectory("./Bookmarks/");
-                }
+                    // The description always starts with the first argument.
+                    var description = e.Command.ArgumentsAsString;
 
-                Settings.SaveFileText($"./Bookmarks/{description.Substring(0, 32)}", sb.ToString());
-                this.TimeoutCommand("bookmark", 15);
+                    var sb = new StringBuilder();
+                    sb.AppendLine($"Description: {description}");
+                    sb.AppendLine($"Bookmark Date/Time: {DateTimeOffset.Now}");
+                    sb.AppendLine($"Uptime: {uptime?.ToString().Split('.')[0]}");
+
+                    if (!Directory.Exists("./Bookmarks"))
+                    {
+                        Directory.CreateDirectory("./Bookmarks");
+                    }
+
+                    Settings.SaveFileText($"./Bookmarks/{description.Substring(0, 32)}", sb.ToString());
+                    this.TimeoutCommand("bookmark", 15);
+                }
+                else
+                {
+                    this.SendTaggableMessage("Stream is offline, no bookmark made.", e);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                this.SendTaggableMessage("Stream is offline, no bookmark made.", e);
+                this.ChatClient.SendWhisper(this.Client.ConnectionCredentials.TwitchUsername, $"There was an error when trying to create a bookmark: {ex.Message}");
+                Settings.SaveFileText($"./bookmarkerror.log", ex.ToString());
             }
         }
 
