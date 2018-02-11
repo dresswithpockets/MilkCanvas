@@ -355,16 +355,28 @@
             }
         }
 
-        public static void UpdateSetting(string key, string value)
+        public static void UpdateSetting<T>(string key, T? value)
+            where T : struct
         {
-            var setting = GetSetting(key);
-            if (setting != null)
+            if (value.HasValue)
             {
-                config.AppSettings.Settings[key].Value = value;
+                UpdateSetting(key, value.Value);
             }
-            else
+        }
+
+        public static void UpdateSetting<T>(string key, T value)
+        {
+            if (value != null)
             {
-                config.AppSettings.Settings.Add(key, value);
+                var setting = GetSetting(key);
+                if (setting != null)
+                {
+                    config.AppSettings.Settings[key].Value = value.ToString();
+                }
+                else
+                {
+                    config.AppSettings.Settings.Add(key, value.ToString());
+                }
             }
         }
 
