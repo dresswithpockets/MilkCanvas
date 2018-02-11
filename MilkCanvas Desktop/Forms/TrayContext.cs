@@ -716,7 +716,6 @@
 
             if (args.Count >= 1)
             {
-                var messageBuilder = new StringBuilder();
                 var action = args[0];
                 switch (action.ToLower())
                 {
