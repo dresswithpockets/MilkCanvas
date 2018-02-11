@@ -319,7 +319,35 @@
             SaveFileText(emotesPath, JsonConvert.SerializeObject(emotes));
         }
 
-        public static void UpdateIf(bool assertion, string key, string value)
+        public static void SaveBookmark(string description, string body)
+        {
+            if (!Directory.Exists(bookmarksPath))
+            {
+                Directory.CreateDirectory(bookmarksPath);
+            }
+
+            // here we want to limit the name of the file if its too long;
+            // but, if the max filname length is longer than the actual
+            // description, then we should change the filename length used
+            // to the length...
+            var filenameLength = description.Length < bookmarkFilenameLength ? description.Length : bookmarkFilenameLength;
+
+            // ...because the substring here would otherwise throw an exception.
+            description = description.Substring(0, filenameLength);
+
+            // increment a value thats appended to the end of the file's name
+            // to ensure that we don't overwrite an existing bookmark.
+            var filepath = Path.Combine(bookmarksPath, $"{description}.txt");
+            var increment = 0;
+            while (File.Exists(filepath))
+            {
+                filepath = Path.Combine(bookmarksPath, $"{description}_{increment++}.txt");
+            }
+
+            SaveFileText(filepath, body);
+        }
+
+        public static void UpdateIf<T>(bool assertion, string key, T value)
         {
             if (assertion)
             {
