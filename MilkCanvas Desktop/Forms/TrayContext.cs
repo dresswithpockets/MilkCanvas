@@ -15,6 +15,8 @@
     using MilkCanvas;
     using MilkCanvas.Enums;
     using MilkCanvas.Events;
+    using MilkCanvas.Logging;
+    using MilkCanvas.Logging.Handlers;
     using MilkCanvas.Models;
 
     using Newtonsoft.Json;
