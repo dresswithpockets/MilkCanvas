@@ -54,6 +54,19 @@
         private const string bookmarkModifiersKey = "BookmarkModifiers";
         private const string bookmarkHotkeyKey = "BookmarkHotkey";
 
+        private const string logMessagesKey = "LogMessages";
+        private const string logSubscribesKey = "LogSubscribes";
+        private const string logResubscribesKey = "LogResubscribes";
+        private const string logGiftedSubsKey = "LogGiftedSubs";
+        private const string logCheersKey = "LogCheers";
+        private const string logTimeoutsKey = "LogTimeouts";
+        private const string logBansKey = "LogBans";
+        private const string logCommandsKey = "LogCommands";
+        private const string logSlowModesKey = "LogSlowModes";
+        private const string logSubModesKey = "LogSubModes";
+        private const string logFollowerModesKey = "LogFollowerModes";
+        private const string logHostsKey = "logHosts";
+
         private static readonly Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
 
         private static readonly Lazy<ChatCommand[]> chatCommands = new Lazy<ChatCommand[]>(() => JsonConvert.DeserializeObject<ChatCommand[]>(ReadFileText(chatCommandsPath), new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.Objects }));
@@ -131,6 +144,30 @@
 
         public static int BookmarkHotkey => GetInt(bookmarkHotkeyKey);
 
+        public static bool LogMessages => GetBool(logMessagesKey);
+
+        public static bool LogSubscribes => GetBool(logSubscribesKey);
+
+        public static bool LogResubscribes => GetBool(logResubscribesKey);
+
+        public static bool LogGiftedSubs => GetBool(logGiftedSubsKey);
+
+        public static bool LogCheers => GetBool(logCheersKey);
+
+        public static bool LogTimeouts => GetBool(logTimeoutsKey);
+
+        public static bool LogBans => GetBool(logBansKey);
+
+        public static bool LogCommands => GetBool(logCommandsKey);
+
+        public static bool LogSlowModes => GetBool(logSlowModesKey);
+
+        public static bool LogSubModes => GetBool(logSubModesKey);
+
+        public static bool LogFollowerModes => GetBool(logFollowerModesKey);
+
+        public static bool LogHosts => GetBool(logHostsKey);
+
         public static KeyValueConfigurationElement GetSetting(string key) => config.AppSettings.Settings[key];
 
         public static bool GetBool(string key)
@@ -193,148 +230,71 @@
             bool? modsRemoveAliases = null,
             bool? useBookmarkHotkey = null,
             int? bookmarkModifiers = null,
-            int? bookmarkHotkey = null)
+            int? bookmarkHotkey = null,
+            bool? logMessages = null,
+            bool? logSubs = null,
+            bool? logResubs = null,
+            bool? logGiftedSubs = null,
+            bool? logCheers = null,
+            bool? logTimeouts = null,
+            bool? logBans = null,
+            bool? logCommands = null,
+            bool? logSlowModes = null,
+            bool? logSubModes = null,
+            bool? logFollowerModes = null,
+            bool? logHosts = null)
         {
 
             // launch options
-            if (firstLaunch != null)
-            {
-                UpdateSetting(launchedKey, firstLaunch.Value.ToString());
-            }
-
-            if (state != null)
-            {
-                UpdateSetting(stateKey, state);
-            }
-
-            if (twitchSubject != null)
-            {
-                UpdateSetting(twitchSubjectKey, twitchSubject);
-            }
-
-            if (twitchAccessToken != null)
-            {
-                UpdateSetting(twitchAccessTokenKey, twitchAccessToken);
-            }
+            UpdateSetting(launchedKey, firstLaunch);
+            UpdateSetting(stateKey, state);
+            UpdateSetting(twitchSubjectKey, twitchSubject);
+            UpdateSetting(twitchAccessTokenKey, twitchAccessToken);
 
             // general options
-            if (useAltAccount != null)
-            {
-                UpdateSetting(useAlternateAccountKey, useAltAccount.Value.ToString());
-            }
-
-            if (altTwitchSubject != null)
-            {
-                UpdateSetting(altTwitchSubjectKey, altTwitchSubject);
-            }
-
-            if (altTwitchAccessToken != null)
-            {
-                UpdateSetting(altTwitchAccessTokenKey, altTwitchAccessToken);
-            }
-
-            if (useSubMessage != null)
-            {
-                UpdateSetting(useSubMessageKey, useSubMessage.Value.ToString());
-            }
-
-            if (subMessage != null)
-            {
-                UpdateSetting(subMessageKey, subMessage);
-            }
-
-            if (useResubMessage != null)
-            {
-                UpdateSetting(useResubMessageKey, useResubMessage.Value.ToString());
-            }
-
-            if (resubMessage != null)
-            {
-                UpdateSetting(resubMessageKey, resubMessage);
-            }
-
-            if (useGiftedSubMessage != null)
-            {
-                UpdateSetting(useGiftedSubMessageKey, useGiftedSubMessage.Value.ToString());
-            }
-
-            if (giftedSubMessage != null)
-            {
-                UpdateSetting(giftedSubMessageKey, giftedSubMessage);
-            }
-
-            if (useCommandDelay != null)
-            {
-                UpdateSetting(useCommandDelayKey, useCommandDelay.Value.ToString());
-            }
-
-            if (commandDelay != null)
-            {
-                UpdateSetting(commandDelayKey, commandDelay.Value.ToString());
-            }
-
-            if (reconnectCanvas != null)
-            {
-                UpdateSetting(reconnectCanvasKey, reconnectCanvas.Value.ToString());
-            }
-
-            if (reconnectDelay != null)
-            {
-                UpdateSetting(reconnectDelayKey, reconnectDelay.Value.ToString());
-            }
+            UpdateSetting(useAlternateAccountKey, useAltAccount);
+            UpdateSetting(altTwitchSubjectKey, altTwitchSubject);
+            UpdateSetting(altTwitchAccessTokenKey, altTwitchAccessToken);
+            UpdateSetting(useSubMessageKey, useSubMessage);
+            UpdateSetting(subMessageKey, subMessage);
+            UpdateSetting(useResubMessageKey, useResubMessage);
+            UpdateSetting(resubMessageKey, resubMessage);
+            UpdateSetting(useGiftedSubMessageKey, useGiftedSubMessage);
+            UpdateSetting(giftedSubMessageKey, giftedSubMessage);
+            UpdateSetting(useCommandDelayKey, useCommandDelay);
+            UpdateSetting(commandDelayKey, commandDelay);
+            UpdateSetting(reconnectCanvasKey, reconnectCanvas);
+            UpdateSetting(reconnectDelayKey, reconnectDelay);
 
             // tagging options
-            if (tagUsers != null)
-            {
-                UpdateSetting(tagUsersKey, tagUsers.Value.ToString());
-            }
-
-            if (modsCanPseudoTag != null)
-            {
-                UpdateSetting(modsCanPseudoTagKey, modsCanPseudoTag.Value.ToString());
-            }
+            UpdateSetting(tagUsersKey, tagUsers);
+            UpdateSetting(modsCanPseudoTagKey, modsCanPseudoTag);
 
             // permissions
-            if (exemptModsFromDelay != null)
-            {
-                UpdateSetting(exemptModsFromDelayKey, exemptModsFromDelay.Value.ToString());
-            }
-
-            if (modsSetChatCommands != null)
-            {
-                UpdateSetting(modsSetChatCommandsKey, modsSetChatCommands.Value.ToString());
-            }
-
-            if (modsRemoveChatCommands != null)
-            {
-                UpdateSetting(modsRemoveChatCommandsKey, modsRemoveChatCommands.Value.ToString());
-            }
-
-            if (modsSetAliases != null)
-            {
-                UpdateSetting(modsSetAliasesKey, modsSetAliases.Value.ToString());
-            }
-
-            if (modsRemoveAliases != null)
-            {
-                UpdateSetting(modsRemoveAliasesKey, modsRemoveAliases.Value.ToString());
-            }
+            UpdateSetting(exemptModsFromDelayKey, exemptModsFromDelay);
+            UpdateSetting(modsSetChatCommandsKey, modsSetChatCommands);
+            UpdateSetting(modsRemoveChatCommandsKey, modsRemoveChatCommands);
+            UpdateSetting(modsSetAliasesKey, modsSetAliases);
+            UpdateSetting(modsRemoveAliasesKey, modsRemoveAliases);
 
             // bookmarks
-            if (useBookmarkHotkey != null)
-            {
-                UpdateSetting(useBookmarkHotkeyKey, useBookmarkHotkey.Value.ToString());
-            }
+            UpdateSetting(useBookmarkHotkeyKey, useBookmarkHotkey);
+            UpdateSetting(bookmarkModifiersKey, bookmarkModifiers);
+            UpdateSetting(bookmarkHotkeyKey, bookmarkHotkey);
 
-            if (bookmarkModifiers != null)
-            {
-                UpdateSetting(bookmarkModifiersKey, bookmarkModifiers.Value.ToString());
-            }
-
-            if (bookmarkHotkey != null)
-            {
-                UpdateSetting(bookmarkHotkeyKey, bookmarkHotkey.Value.ToString());
-            }
+            // logging
+            UpdateSetting(logMessagesKey, logMessages);
+            UpdateSetting(logSubscribesKey, logSubs);
+            UpdateSetting(logResubscribesKey, logResubs);
+            UpdateSetting(logGiftedSubsKey, logGiftedSubs);
+            UpdateSetting(logCheersKey, logCheers);
+            UpdateSetting(logTimeoutsKey, logTimeouts);
+            UpdateSetting(logBansKey, logBans);
+            UpdateSetting(logCommandsKey, logCommands);
+            UpdateSetting(logSlowModesKey, logSlowModes);
+            UpdateSetting(logSubModesKey, logSubModes);
+            UpdateSetting(logFollowerModesKey, logFollowerModes);
+            UpdateSetting(logHostsKey, logHosts);
 
             config.Save();
         }
