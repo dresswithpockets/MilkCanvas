@@ -15,6 +15,8 @@
 
     public static class Settings
     {
+        private const int bookmarkFilenameLength = 64;
+        private const string bookmarksPath = "./bookmarks";
         private const string chatCommandsPath = "commands.json";
         private const string permissionsPath = "permissions.json";
         private const string aliasesPath = "aliases.json";
