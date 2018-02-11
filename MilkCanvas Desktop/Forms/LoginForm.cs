@@ -51,32 +51,6 @@
                     $"&nonce={this.Nonce}" +
                     $"&state={this.State}";
 
-            // Run as a task so it doesn't block
-            Task.Run(() =>
-            {
-                // once we've determined that this hash lock file exists, we need to use
-                // its contents to obtain something useful.
-                while (!Settings.FileReady(this.hashFile))
-                {
-                }
-
-                switch (this.AwaitingPlatform)
-                {
-                    case SocialPlatform.Twitch: return JsonConvert.DeserializeObject<TwitchHashFile>(Settings.ReadFileText(this.hashFile));
-                    case SocialPlatform.Mixer: return null; // TODO: mixer integration
-                    case SocialPlatform.YouTube: return null; // TODO: youtube integration
-                    default: return null;
-                }
-            }).ContinueWith(t =>
-            {
-                this.Invoke(new Action(() =>
-                {
-                    // TODO: submit verification for mixer and youtube
-                    this.FinishedAuthenticator = true;
-                    this.SubmitTwitchVerification(t.Result);
-                }));
-            });
-
             this.InitializeComponent();
         }
 
@@ -148,6 +122,32 @@
                 Process.Start(this.TwitchAuthenticationUrl);
 
                 this.AwaitingPlatform = SocialPlatform.Twitch;
+
+                // Run as a task so it doesn't block
+                Task.Run(() =>
+                {
+                    // once we've determined that this hash lock file exists, we need to use
+                    // its contents to obtain something useful.
+                    while (!Settings.FileReady(this.hashFile))
+                    {
+                    }
+
+                    switch (this.AwaitingPlatform)
+                    {
+                        case SocialPlatform.Twitch: return JsonConvert.DeserializeObject<TwitchHashFile>(Settings.ReadFileText(this.hashFile));
+                        case SocialPlatform.Mixer: return null; // TODO: mixer integration
+                        case SocialPlatform.YouTube: return null; // TODO: youtube integration
+                        default: return null;
+                    }
+                }).ContinueWith(t =>
+                {
+                    this.Invoke(new Action(() =>
+                    {
+                        // TODO: submit verification for mixer and youtube
+                        this.FinishedAuthenticator = true;
+                        this.SubmitTwitchVerification(t.Result);
+                    }));
+                });
             }
         }
     }
