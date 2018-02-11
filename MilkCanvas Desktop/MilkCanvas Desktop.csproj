@@ -178,13 +178,24 @@
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
     <Compile Include="HotkeyManager.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Logging\DebugLogger.cs" />
+    <Compile Include="Logging\Formatters\DefaultLoggerFormatter.cs" />
+    <Compile Include="Logging\Formatters\ILoggerFormatter.cs" />
+    <Compile Include="Logging\Handlers\ConsoleLoggerHandler.cs" />
+    <Compile Include="Logging\Handlers\DebugConsoleLoggerHandler.cs" />
+    <Compile Include="Logging\Handlers\FileLoggerHandler.cs" />
+    <Compile Include="Logging\ILoggerHandler.cs" />
+    <Compile Include="Logging\ILoggerHandlerManager.cs" />
+    <Compile Include="Logging\LogMessage.cs" />
+    <Compile Include="Logging\LogPublisher.cs" />
+    <Compile Include="Logging\Module\LoggerModule.cs" />
+    <Compile Include="Logging\Module\ModuleManager.cs" />
     <Compile Include="Models\Alias.cs" />
     <Compile Include="Models\ChatCommand.cs" />
     <Compile Include="Models\Command.cs" />
     <Compile Include="Models\CommandTimeout.cs" />
     <Compile Include="Models\Permission.cs" />
-    <Compile Include="Models\SubscriberEmote.cs" />
-    <Compile Include="Models\SubscriberEmotes.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="Events\TwitchAuthenticatedEventArgs.cs" />
     <Compile Include="Models\TwitchHashFile.cs" />
