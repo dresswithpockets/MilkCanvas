@@ -334,10 +334,6 @@
 
             this.Config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
 
-            this.Login = new LoginForm();
-            this.Login.FormClosed += this.Login_FormClosed;
-            this.Login.TwitchAuthenticated += this.Login_TwitchAuthenticated;
-
             this.About = new About();
 
             this.IconMenu = new ContextMenu();
@@ -370,10 +366,16 @@
             // FirstLaunch is a special property that handles getting the launch state of the app
             // from the app config. If there is a launch value already saved then this app has been launched before
             // and we need to follow up with a first time setup.
-            if (Settings.FirstLaunch)
+            if (Settings.FirstLaunch ||
+                string.IsNullOrEmpty(Settings.TwitchAccessToken) ||
+                string.IsNullOrEmpty(Settings.TwitchSubject) ||
+                string.IsNullOrEmpty(Settings.State))
             {
                 // the login form will handle the actual authentication of the user.
                 // All we're waiting for is LoginForm to close with a token response.
+                this.Login = new LoginForm();
+                this.Login.FormClosed += this.Login_FormClosed;
+                this.Login.TwitchAuthenticated += this.Login_TwitchAuthenticated;
                 this.Login.Show();
             }
             else
