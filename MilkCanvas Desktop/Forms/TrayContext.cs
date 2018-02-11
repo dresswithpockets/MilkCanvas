@@ -54,8 +54,6 @@
 
         private LoginForm Login { get; set; }
 
-        private GettingStartedForm GettingStarted { get; set; }
-
         private TwitchClient Client { get; set; }
 
         private TwitchClient ChatClient { get; set; }
@@ -271,7 +269,6 @@
                 }
 
                 this.Login?.Dispose();
-                this.GettingStarted?.Dispose();
             }
 
             // dispose unmanaged state
@@ -280,7 +277,6 @@
             this.TrayIcon = null;
             this.IconMenu = null;
             this.Login = null;
-            this.GettingStarted = null;
 
             this.Client = null;
             this.ChatClient = null;
@@ -341,8 +337,6 @@
             this.Login.TwitchAuthenticated += this.Login_TwitchAuthenticated;
 
             this.About = new About();
-
-            this.GettingStarted = new GettingStartedForm();
 
             this.IconMenu = new ContextMenu();
             this.TrayIcon = new NotifyIcon
