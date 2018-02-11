@@ -430,21 +430,22 @@
 
                 if (uptime != null)
                 {
-                    // The description always starts with the first argument.
-                    var description = e.Command.ArgumentsAsString;
+                    // The description always starts with the first argument,
+                    // so we can use the full arguments string as the description.
+                    // Additionally, e can very well be null so we want to account
+                    // for that here.
+                    var description = e?.Command.ArgumentsAsString ?? string.Empty;
 
+                    // String building is so much sexier than using \n over and over again.
                     var sb = new StringBuilder();
                     sb.AppendLine($"Description: {description}");
                     sb.AppendLine($"Bookmark Date/Time: {DateTimeOffset.Now}");
                     sb.AppendLine($"Uptime: {uptime?.ToString().Split('.')[0]}");
 
-                    if (!Directory.Exists("./Bookmarks"))
-                    {
-                        Directory.CreateDirectory("./Bookmarks");
-                    }
+                    Settings.SaveBookmark(description, sb.ToString());
 
-                    Settings.SaveFileText($"./Bookmarks/{description.Substring(0, 32)}", sb.ToString());
                     this.TimeoutCommand("bookmark", 15);
+                    this.SendTaggableMessage("Bookmark created!", e);
                 }
                 else
                 {
