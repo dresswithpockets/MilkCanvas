@@ -84,10 +84,10 @@
         /// <param name="subject">The userid of a user received by a fragment.</param>
         /// <param name="state">The state string verified by the host.</param>
         /// <param name="save">Whether or not to save the aforementioned parameters in the app settings.</param>
-        public async void TwitchSetup(string twitchClient, string access, string subject, string state, bool save = true)
+        public void TwitchSetup(string twitchClient, string access, string subject, string state, bool save = true)
         {
             this.API = new TwitchAPI(twitchClient, access);
-            var user = await this.API.Users.v5.GetUserByIDAsync(subject);
+            var user = this.API.Users.v5.GetUserByIDAsync(subject).GetAwaiter().GetResult();
 
             this.Credentials = new ConnectionCredentials(user.Name, access);
             this.Client = new TwitchClient(this.Credentials, channel: user.Name);
